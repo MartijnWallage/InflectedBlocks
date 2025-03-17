@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ancient Greek Language Learning</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Tau Prolog -->
+    <script src="js/lib/tau-prolog.min.js" onerror="console.error('Failed to load Tau Prolog core')"></script>
+    <!-- Check if Tau Prolog is loaded -->
+    <script>
+        window.addEventListener('load', function() {
+            if (typeof pl === 'undefined') {
+                console.error('Tau Prolog failed to load. Please check your internet connection and try again.');
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = 'Failed to load grammar checking. Please check your internet connection and refresh the page.';
+                document.querySelector('.sentence-section').prepend(errorDiv);
+            } else {
+                console.log('Tau Prolog loaded successfully');
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Upper Section: Flashcards -->
+        <section class="flashcard-section">
+            <div class="section-header">
+                <h2>Flashcards</h2>
+                <button id="toggleFlashcards" class="toggle-btn">▼</button>
+            </div>
+            <div class="flashcard-content">
+                <div class="flashcard-controls">
+                    <button id="addFlashcardBtn" class="primary-btn">Add New Flashcard</button>
+                    <div class="flashcard-navigation">
+                        <button id="prevCard" class="nav-btn">←</button>
+                        <span id="cardCounter">0/0</span>
+                        <button id="nextCard" class="nav-btn">→</button>
+                    </div>
+                </div>
+                <div id="flashcardForm" class="flashcard-form hidden">
+                    <h3>Add New Flashcard</h3>
+                    <form id="newFlashcardForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="wordType">Word Type:</label>
+                                <select id="wordType" name="wordType" required>
+                                    <option value="">Select type...</option>
+                                    <option value="verb">Verb</option>
+                                    <option value="noun">Noun</option>
+                                    <option value="adjective">Adjective</option>
+                                    <option value="adverb">Adverb</option>
+                                    <option value="preposition">Preposition</option>
+                                    <option value="conjunction">Conjunction</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="greekWord">Greek Word:</label>
+                                <input type="text" id="greekWord" name="greekWord" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="englishTranslation">English Translation:</label>
+                                <input type="text" id="englishTranslation" name="englishTranslation" required>
+                            </div>
+                        </div>
+                        <div id="inflectionFields" class="inflection-fields">
+                            <!-- Inflection fields will be added dynamically based on word type -->
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="primary-btn">Save Flashcard</button>
+                            <button type="button" class="secondary-btn" id="cancelFlashcard">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                <div id="flashcardContainer" class="flashcard-container">
+                    <!-- Flashcards will be added here dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Lower Section: Sentence Construction -->
+        <section class="sentence-section">
+            <h2>Construct Sentence</h2>
+            <div class="sentence-input-container">
+                <div class="sentence-blocks" id="sentenceBlocks">
+                    <div class="sentence-block" id="currentBlock">
+                        <input type="text" class="block-input" id="blockInput" placeholder="Type a word...">
+                        <div class="block-suggestions"></div>
+                    </div>
+                </div>
+                <div class="flashcard-suggestion hidden" id="flashcardSuggestion">
+                    <p>This word isn't in your flashcards yet.</p>
+                    <button class="primary-btn" id="addNewFlashcardBtn">Add New Flashcard</button>
+                </div>
+            </div>
+            <div class="sentence-display" id="sentenceDisplay">
+                <!-- Constructed sentence will be displayed here -->
+            </div>
+            <div class="word-input-container">
+                <input type="text" id="wordInput" placeholder="Search for a word...">
+                <div id="wordSuggestions" class="word-suggestions"></div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
