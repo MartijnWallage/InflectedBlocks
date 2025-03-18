@@ -169,13 +169,16 @@ async function checkGrammar() {
         session.answer(x => {
             if (x == false) {
                 console.log('Sentence is invalid');
+                sentenceBlocks.style.border = '2px solid red';
             } else {
                 console.log('Sentence is valid');
+                sentenceBlocks.style.border = '2px solid green';
             }
         });
         console.log('Query call completed');
     } catch (error) {
         console.error('Error in checkGrammar:', error);
+        sentenceBlocks.style.border = '2px solid red';
     }
 }
 
