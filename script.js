@@ -983,7 +983,7 @@ function displayBlockSuggestions(matches) {
         // Add main word
         const mainDiv = document.createElement('div');
         mainDiv.className = 'suggestion-item';
-        mainDiv.textContent = `${card.greek} (${card.english})`;
+        mainDiv.textContent = card.greek;
         mainDiv.addEventListener('click', () => {
             currentFlashcard = card;
             blockInput.value = card.greek;
@@ -998,8 +998,7 @@ function displayBlockSuggestions(matches) {
             if (inflection) {
                 const div = document.createElement('div');
                 div.className = 'suggestion-item';
-                const inflectionLabel = wordTypeConfigs[card.type].inflections.find(i => i.key === key)?.label || key;
-                div.textContent = `${inflection} (${card.greek} - ${inflectionLabel})`;
+                div.textContent = inflection;
                 div.addEventListener('click', () => {
                     currentFlashcard = card;
                     blockInput.value = inflection;
