@@ -1,4 +1,3 @@
-
 // Store flashcards in memory (later we can add persistence)
 let flashcards = [];
 let currentCardIndex = 0;
@@ -104,7 +103,7 @@ openButton.onclick = () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const databaseString = e.target.result;
-      session.consult(databaseString);
+      consultDatabase(databaseString);
     };
     reader.readAsText(file);
   };
@@ -131,12 +130,158 @@ menuButton.addEventListener('click', () => {
 });
 
 
+async function consultDatabase(db) {
+    session.consult(db);
+    loadFlashcardsFromProlog();
+}
 
+
+// Function to create flashcards from the Prolog database
+function loadFlashcardsFromProlog() {
+    console.log('Creating flashcards from Prolog...');
+    console.log(session.toString());
+
+    // Query the Prolog database for all words and their types
+    session.query("word_type(X, Y).", {
+        success: (goal) => {
+            console.log(`Query parsed: ${goal}.`);
+            
+            // Collect all answers first
+            let allAnswers = [];
+            function collectAnswers() {
+                session.answer({
+                    success: (answer) => {
+                        console.log(`Answer received: ${answer}.`);
+                        const formattedAnswer = session.format_answer(answer);
+                        console.log(`Formatted answer: ${formattedAnswer}`);
+                        allAnswers.push(formattedAnswer);
+                        collectAnswers();
+                    },
+                    error: (error) => {
+                        console.error(`Error getting answer: ${error}.`);
+                        collectAnswers();
+                    },
+                    fail: () => {
+                        console.log('No more answers available.');
+                        console.log('All answers collected:', allAnswers);
+                        // Now process all answers
+                        processAllAnswers(allAnswers);
+                    }
+                });
+            }
+
+            // Process all collected answers
+            function processAllAnswers(answers) {
+                console.log('Processing all answers...');
+                answers.forEach(answer => {
+                    createFlashcardFromProlog(answer);
+                });
+            }
+
+            // Start collecting answers
+            console.log('Starting to collect answers...');
+            collectAnswers();
+        },
+        error: (error) => {
+            console.error(`Error in initial query: ${error}.`);
+        }
+    });
+}
+
+function createFlashcardFromProlog(answer) {
+    console.log('Creating flashcard from answer:', answer);
+    const parts = answer.split(", ");
+    const xPart = parts[0];
+    const yPart = parts[1];
+
+    const greek = xPart.split(" = ")[1];
+    const type = yPart.split(" = ")[1];
+
+    console.log(`Creating flashcard for word: ${greek} of type: ${type}`);
+
+    const flashcard = {
+        type: type,
+        greek: greek,
+        english: '',
+        inflections: {}
+    };
+
+    // Query the Prolog database for the word's translation
+    session.query(`word_translation('${flashcard.greek}', X).`, {
+        success: (goal) => {
+            console.log(`Translation query parsed for ${flashcard.greek}`);
+            session.answer({
+                success: (translationAnswer) => {
+                    const translationString = session.format_answer(translationAnswer);
+                    flashcard.english = translationString.split(" = ")[1];
+                    console.log(`Got translation: ${flashcard.english}`);
+
+                    // If the word is a verb, query the Prolog database for its inflections
+                    if (flashcard.type === 'verb') {
+                        session.query(`word_inflection('${flashcard.greek}', X, Y).`, {
+                            success: (inflectionGoal) => {
+                                console.log(`Inflection query parsed for ${flashcard.greek}`);
+                                function getInflections() {
+                                    session.answer({
+                                        success: (inflectionAnswer) => {
+                                            const inflectionString = session.format_answer(inflectionAnswer);
+                                            const inflectionParts = inflectionString.split(", ");
+                                            const inflectionTypePart = inflectionParts[0];
+                                            const inflectionFormPart = inflectionParts[1];
+                                            const inflectionType = inflectionTypePart.split(" = ")[1];
+                                            const inflectionForm = inflectionFormPart.split(" = ")[1];
+                                            flashcard.inflections[inflectionType] = inflectionForm;
+                                            console.log(`Got inflection: ${inflectionType} = ${inflectionForm}`);
+                                            getInflections();
+                                        },
+                                        error: (error) => {
+                                            console.error(`Error getting inflection: ${error}.`);
+                                            finishFlashcard();
+                                        },
+                                        fail: () => {
+                                            console.log('No more inflections.');
+                                            finishFlashcard();
+                                        }
+                                    });
+                                }
+                                getInflections();
+                            },
+                            error: (error) => {
+                                console.error(`Error querying inflections: ${error}.`);
+                                finishFlashcard();
+                            }
+                        });
+                    } else {
+                        finishFlashcard();
+                    }
+                },
+                error: (error) => {
+                    console.error(`Error getting translation: ${error}.`);
+                    finishFlashcard();
+                },
+                fail: () => {
+                    console.log('No translation found.');
+                    finishFlashcard();
+                }
+            });
+        },
+        error: (error) => {
+            console.error(`Error querying translation: ${error}.`);
+            finishFlashcard();
+        }
+    });
+
+    function finishFlashcard() {
+        console.log('Finishing flashcard:', flashcard);
+        flashcards.push(flashcard);
+        displayCurrentCard();
+    }
+}
 
 function initializeProlog() {
 	session = pl.create(1000);
 
-	session.consult(database);
+	consultDatabase(database);
 }
 
 
@@ -386,7 +531,7 @@ function initializeApp() {
     addNewFlashcardBtn.addEventListener('click', handleAddNewFlashcard);
 
     // Load initial data
-    loadFlashcards();
+  //  loadFlashcards();
     displayCurrentCard();
 
 }
@@ -472,15 +617,6 @@ function handleAddNewFlashcard() {
     document.getElementById('greekWord').value = wordToAdd;
     flashcardForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
     flashcardSuggestion.classList.add('hidden');
-}
-
-// Load flashcards from localStorage when the page loads
-function loadFlashcards() {
-    const savedFlashcards = localStorage.getItem(STORAGE_KEY);
-    if (savedFlashcards) {
-        flashcards = JSON.parse(savedFlashcards);
-        displayCurrentCard();
-    }
 }
 
 // Save flashcards to localStorage
