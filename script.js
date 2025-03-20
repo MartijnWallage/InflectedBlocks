@@ -129,12 +129,23 @@ menuButton.addEventListener('click', () => {
   menuDropdown.classList.toggle('show');
 });
 
-
 async function consultDatabase(db) {
     session.consult(db);
     loadFlashcardsFromProlog();
 }
 
+function initializeProlog() {
+    session = pl.create(1000);
+    // Load the initial database
+    fetch(database)
+        .then(response => response.text())
+        .then(databaseString => {
+            consultDatabase(databaseString);
+        })
+        .catch(error => {
+            console.error('Error loading initial database:', error);
+        });
+}
 
 // Function to create flashcards from the Prolog database
 function loadFlashcardsFromProlog() {
@@ -278,13 +289,6 @@ function createFlashcardFromProlog(answer) {
     }
 }
 
-function initializeProlog() {
-	session = pl.create(1000);
-
-	consultDatabase(database);
-}
-
-
 function assertWord(word, type) {
 	let assertion = `asserta(word_type('${word}', ${type})).`;
 	session.query(assertion, {
@@ -346,7 +350,6 @@ function isValidSentence(wordsArray) {
             });
         });
 }
-
 
 function checkGrammar() {
     console.log('Grammar check started');
