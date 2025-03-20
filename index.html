@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ancient Greek Language Learning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <!-- Tau Prolog -->
     <script src="js/lib/tau-prolog.min.js" onerror="console.error('Failed to load Tau Prolog core')"></script>
@@ -27,11 +30,17 @@
         <!-- Menu -->
         <section class="menu-section">
             <div id="menu">
-                <button class="menu-button">Menu</button>
-                    <div class="menu-dropdown">
-                        <button id="open-button">Open</button>
-                        <button id="save-button">Save</button>
-                    </div>
+                <button class="menu-button">File</button>
+                <div class="menu-dropdown">
+                    <button id="open-button">
+                        <span class="menu-icon">📂</span>
+                        Open
+                    </button>
+                    <button id="save-button">
+                        <span class="menu-icon">💾</span>
+                        Save
+                    </button>
+                </div>
             </div>
         </section>
 

@@ -228,9 +228,6 @@ function checkGrammar() {
     if (flashcard) {
         // Find the matching inflection if it exists
         const matchingInflection = Object.entries(flashcard.inflections).find(([key, inflection]) => inflection === word);
-
-        // Assert the word type
-   //     assertWord(word, type);
     }
 
         return `${word}`;
