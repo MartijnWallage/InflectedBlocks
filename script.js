@@ -87,7 +87,10 @@ let currentFlashcard = null;
 // Prolog session
 let session;
 
+
+
 // Initialize Prolog session
+/*
 async function initializeProlog() {
     console.log('Starting Prolog initialization...');
     
@@ -114,7 +117,7 @@ async function initializeProlog() {
         }
         
         console.log('Creating Prolog session...');
-        session = pl.create();
+        session = await pl.create();
         
         // Load grammar rules from external file
         console.log('Loading grammar rules from grammar.pl...');
@@ -127,7 +130,6 @@ async function initializeProlog() {
         // Consult the grammar rules
         console.log('Consulting grammar rules...');
         session.consult(grammarRules);
-        
         console.log('Prolog initialization completed successfully');
     } catch (error) {
         console.error('Error initializing Prolog:', error);
@@ -137,9 +139,79 @@ async function initializeProlog() {
         errorMessage.textContent = `Failed to initialize grammar checking: ${error.message}. Please refresh the page.`;
         document.querySelector('.sentence-section').prepend(errorMessage);
     }
+}*/
+
+function initializeProlog() {
+	session = pl.create(1000);
+
+	session.consult('grammar.pl');
 }
 
-async function checkGrammar() {
+
+function assertWord(word, type) {
+	let assertion = `asserta(word_type('${word}', ${type})).`;
+	session.query(assertion, {
+        success: function(goal) {
+            console.log(`Query parsed: ${goal}.`);
+            session.answer({
+                success: function (answer) {
+                    console.log(`${assertion} is ${answer}`);
+                },
+                error: function (err) {
+                    console.log(`Error: ${err}.`);
+                },
+                fail: function (fail) {
+                    console.log(`${assertion} is ${fail}.`);
+                },
+                limit: function () {
+                    console.log('Limit exceeded.');
+                },
+            });
+        },
+        error: function(err) {
+            console.log(`Query parsing error: ${err}.`);
+        }
+    });
+}
+
+function isValidSentence(wordsArray) {
+	let prologList = `[${wordsArray.map(w => `'${w}'`).join(', ')}]`;
+	console.log(`Checking if ${prologList} is a valid sentence...`);
+	let query = `valid_sentence(${prologList}).`;
+
+    return new Promise((resolve, reject) => {
+            session.query(query, {
+                success: function(goal) {
+                    console.log(`Query parsed: ${goal}.`);
+                    session.answer({
+                        success: function (answer) {
+                            console.log(`${query} is ${answer}`);
+                            resolve(true);
+                        },
+                        error: function (err) {
+                            console.log(`Error: ${err}.`);
+                            resolve(false);
+                        },
+                        fail: function (fail) {
+                            console.log(`${query} is ${fail}.`);
+                            resolve(false);
+                        },
+                        limit: function () {
+                            console.log('Limit exceeded.')
+                            resolve(false);
+                        },
+                    });
+                },
+                error: function(err) {
+                    console.log(`Query parsing error: ${err}.`);
+                    resolve(false);
+                }
+            });
+        });
+}
+
+
+function checkGrammar() {
     console.log('Grammar check started');
 
     // Skip if Prolog session isn't ready yet
@@ -147,12 +219,44 @@ async function checkGrammar() {
         console.log('Prolog session not ready yet');
         return;
     }
+	console.log(`Prolog session ready: ${session}`);
+
+	// Some tests
+    /*
+    isValidSentence(['rabbit', 'runs']);
+	console.log('Asserting some words...');
+	assertWord("lego", "verb");      // "λέγω" means "I say" (verb)
+    assertWord("kai", "conjunction"); // "καὶ" means "and" (conjunction)
+    assertWord("sophia", "noun");      // "σοφία" means "wisdom" (noun)
+	assertWord("agathos", "adjective"); // "ἀγαθός" means "good" (adjective)
+
+	isValidSentence(["lego", "sophia"]); // "λέγω σοφία" is a valid sentence
+	isValidSentence(["sophia", "kai"]); // "σοφία καὶ" is an invalid sentence
+	console.log('Done testing'); */
+
 
     // Get the words from the sentence blocks
     const blocks = Array.from(sentenceBlocks.querySelectorAll('.sentence-block'));
     const words = blocks
         .filter(block => block && block.querySelector('.block-text'))
-        .map(block => `'${block.querySelector('.block-text').textContent}'`);
+        .map(block => {
+    const wordElement = block.querySelector('.block-text');
+    const word = wordElement.textContent;
+    const type = block.getAttribute('data-type');
+    const flashcard = flashcards.find(card => 
+        card.greek === word || Object.values(card.inflections).includes(word)
+    );
+
+    if (flashcard) {
+        // Find the matching inflection if it exists
+        const matchingInflection = Object.entries(flashcard.inflections).find(([key, inflection]) => inflection === word);
+
+        // Assert the word type
+        assertWord(word, type);
+    }
+
+        return `${word}`;
+    });
 
     // Skip if there are no words to check
     if (words.length === 0) {
@@ -162,28 +266,40 @@ async function checkGrammar() {
 
     console.log('Words to check:', words);
     
-    try {
-        // Query the sentence
-        console.log('About to query sentence...');
-        session.query(`sentence([${words.join(', ')}]).`);
-        session.answer(x => {
-            if (x == false) {
-                console.log('Sentence is invalid');
-                sentenceBlocks.style.border = '2px solid red';
-            } else {
-                console.log('Sentence is valid');
-                sentenceBlocks.style.border = '2px solid green';
-            }
-        });
-        console.log('Query call completed');
-    } catch (error) {
-        console.error('Error in checkGrammar:', error);
-        sentenceBlocks.style.border = '2px solid red';
-    }
+    // Query the sentence
+    console.log('About to query sentence...', words);
+    isValidSentence(words).then((isValid) => {
+        if (isValid) {
+            sentenceBlocks.style.border = '2px solid green';
+        } else {
+            sentenceBlocks.style.border = '2px solid red';
+        }
+    });
+
+    /*
+	query = `valid_sentence([${words.join(', ')}]).`;
+	
+	session.query(query);
+    session.answer(x => {
+		console.log('Answer:', x);
+        if (x == false) {
+            console.log('Sentence is invalid');
+            sentenceBlocks.style.border = '2px solid red';
+        } else {
+            console.log('Sentence is valid');
+            sentenceBlocks.style.border = '2px solid green';
+        }
+    });
+	console.log(`The following query was made: ${query}`);
+    console.log('Query call completed');*/
 }
 
 // Initialize DOM elements and event listeners
-async function initializeApp() {
+function initializeApp() {
+
+    // Initialize Prolog
+    initializeProlog();
+
     // Get DOM elements
     flashcardContainer = document.getElementById('flashcardContainer');
     addFlashcardBtn = document.getElementById('addFlashcardBtn');
@@ -315,8 +431,6 @@ async function initializeApp() {
     loadFlashcards();
     displayCurrentCard();
 
-    // Initialize Prolog
-    await initializeProlog();
 }
 
 // Event handler functions

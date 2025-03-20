@@ -1,11 +1,11 @@
-% Sentence structure rules
-sentence(Sentence) :-
-    valid_sentence(Sentence).
+member(X,[X|_]).
+member(X,[_|Xs]) :- member(X,Xs).
 
-% Valid sentence:
-% A sentence is valid if it has more than one word
-valid_sentence([_, _|_]).
+:- dynamic(word_type/2).
 
-% Invalid sentence:
-% A sentence is invalid if it has only one word
-valid_sentence([_]) :- fail.
+word_type(runs, verb).
+word_type(rabbit, noun).
+
+valid_sentence(Words) :-
+    word_type(Word, verb),
+    member(Word, Words).
