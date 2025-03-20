@@ -29,6 +29,19 @@ body {
     padding: 20px;
 }
 
+.menu-section {
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 50px;
+}
+
+.menu-dropdown {
+    display: none;
+}
+.menu-dropdown.show {
+    display: block;
+}
+
 /* Flashcard Section */
 .flashcard-section {
     background: white;

@@ -1,3 +1,4 @@
+
 // Store flashcards in memory (later we can add persistence)
 let flashcards = [];
 let currentCardIndex = 0;
@@ -87,64 +88,55 @@ let currentFlashcard = null;
 // Prolog session
 let session;
 
+// Menu
+let database = 'grammar.pl';
+
+const menu = document.getElementById('menu');
+
+const openButton = document.getElementById('open-button');
+openButton.onclick = () => {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.pl';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    database = file.name;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const databaseString = e.target.result;
+      session.consult(databaseString);
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+};
+
+const saveButton = document.getElementById('save-button');
+saveButton.onclick = () => {
+  const databaseString = session.toString();
+  const blob = new Blob([databaseString], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = database;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+// Add event listener to toggle menu dropdown
+const menuButton = menu.querySelector('.menu-button');
+menuButton.addEventListener('click', () => {
+  const menuDropdown = menu.querySelector('.menu-dropdown');
+  menuDropdown.classList.toggle('show');
+});
 
 
-// Initialize Prolog session
-/*
-async function initializeProlog() {
-    console.log('Starting Prolog initialization...');
-    
-    try {
-        // Wait for Tau Prolog to be available
-        if (typeof pl === 'undefined') {
-            console.log('Waiting for Tau Prolog to load...');
-            await new Promise((resolve, reject) => {
-                let attempts = 0;
-                const maxAttempts = 50; // 5 seconds maximum wait time
-                
-                const checkPl = setInterval(() => {
-                    attempts++;
-                    if (typeof pl !== 'undefined') {
-                        clearInterval(checkPl);
-                        console.log('Tau Prolog loaded successfully');
-                        resolve();
-                    } else if (attempts >= maxAttempts) {
-                        clearInterval(checkPl);
-                        reject(new Error('Tau Prolog failed to load after 5 seconds. Please check if the script is properly loaded.'));
-                    }
-                }, 100);
-            });
-        }
-        
-        console.log('Creating Prolog session...');
-        session = await pl.create();
-        
-        // Load grammar rules from external file
-        console.log('Loading grammar rules from grammar.pl...');
-        const response = await fetch('grammar.pl');
-        if (!response.ok) {
-            throw new Error(`Failed to load grammar.pl: ${response.statusText}`);
-        }
-        const grammarRules = await response.text();
-        
-        // Consult the grammar rules
-        console.log('Consulting grammar rules...');
-        session.consult(grammarRules);
-        console.log('Prolog initialization completed successfully');
-    } catch (error) {
-        console.error('Error initializing Prolog:', error);
-        // Show error to user
-        const errorMessage = document.createElement('div');
-        errorMessage.className = 'error-message';
-        errorMessage.textContent = `Failed to initialize grammar checking: ${error.message}. Please refresh the page.`;
-        document.querySelector('.sentence-section').prepend(errorMessage);
-    }
-}*/
+
 
 function initializeProlog() {
 	session = pl.create(1000);
 
-	session.consult('grammar.pl');
+	session.consult(database);
 }
 
 
@@ -221,20 +213,6 @@ function checkGrammar() {
     }
 	console.log(`Prolog session ready: ${session}`);
 
-	// Some tests
-    /*
-    isValidSentence(['rabbit', 'runs']);
-	console.log('Asserting some words...');
-	assertWord("lego", "verb");      // "λέγω" means "I say" (verb)
-    assertWord("kai", "conjunction"); // "καὶ" means "and" (conjunction)
-    assertWord("sophia", "noun");      // "σοφία" means "wisdom" (noun)
-	assertWord("agathos", "adjective"); // "ἀγαθός" means "good" (adjective)
-
-	isValidSentence(["lego", "sophia"]); // "λέγω σοφία" is a valid sentence
-	isValidSentence(["sophia", "kai"]); // "σοφία καὶ" is an invalid sentence
-	console.log('Done testing'); */
-
-
     // Get the words from the sentence blocks
     const blocks = Array.from(sentenceBlocks.querySelectorAll('.sentence-block'));
     const words = blocks
@@ -252,7 +230,7 @@ function checkGrammar() {
         const matchingInflection = Object.entries(flashcard.inflections).find(([key, inflection]) => inflection === word);
 
         // Assert the word type
-        assertWord(word, type);
+   //     assertWord(word, type);
     }
 
         return `${word}`;
@@ -275,23 +253,6 @@ function checkGrammar() {
             sentenceBlocks.style.border = '2px solid red';
         }
     });
-
-    /*
-	query = `valid_sentence([${words.join(', ')}]).`;
-	
-	session.query(query);
-    session.answer(x => {
-		console.log('Answer:', x);
-        if (x == false) {
-            console.log('Sentence is invalid');
-            sentenceBlocks.style.border = '2px solid red';
-        } else {
-            console.log('Sentence is valid');
-            sentenceBlocks.style.border = '2px solid green';
-        }
-    });
-	console.log(`The following query was made: ${query}`);
-    console.log('Query call completed');*/
 }
 
 // Initialize DOM elements and event listeners
@@ -446,11 +407,14 @@ function handleFlashcardSubmit(e) {
         inflections: {}
     };
 
+    assertWord(flashcard.greek, flashcard.type);
+
     console.log('Flashcard data:', flashcard);
 
     if (wordTypeConfigs[flashcard.type] && wordTypeConfigs[flashcard.type].inflections.length > 0) {
         wordTypeConfigs[flashcard.type].inflections.forEach(inflection => {
             flashcard.inflections[inflection.key] = formData.get(inflection.key);
+            assertWord(flashcard.inflections[inflection.key], flashcard.type);
         });
     }
 
