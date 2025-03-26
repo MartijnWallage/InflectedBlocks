@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   TextField,
@@ -10,16 +10,27 @@ import {
   Alert,
 } from '@mui/material';
 import { Word, Inflection } from '../types/word';
-import { saveWord } from '../utils/wordStorage';
+import { saveWord, updateWord } from '../utils/wordStorage';
 import { notifyWordUpdates } from '../utils/events';
 
-export default function WordForm() {
+interface WordFormProps {
+  wordToEdit?: Word;
+  onCancel?: () => void;
+}
+
+export default function WordForm({ wordToEdit, onCancel }: WordFormProps) {
   const [word, setWord] = useState<Word>({
     lemma: '',
     translation: '',
     inflections: [{ form: '', description: '' }],
   });
   const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    if (wordToEdit) {
+      setWord(wordToEdit);
+    }
+  }, [wordToEdit]);
 
   const handleAddInflection = () => {
     setWord({
@@ -47,7 +58,11 @@ export default function WordForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    saveWord(word);
+    if (wordToEdit) {
+      updateWord(wordToEdit, word);
+    } else {
+      saveWord(word);
+    }
     setWord({
       lemma: '',
       translation: '',
@@ -60,7 +75,7 @@ export default function WordForm() {
   return (
     <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
       <Typography variant="h6" gutterBottom>
-        Add New Word
+        {wordToEdit ? 'Edit Word' : 'Add New Word'}
       </Typography>
       <form onSubmit={handleSubmit}>
         <Stack spacing={3}>
@@ -122,9 +137,16 @@ export default function WordForm() {
             Add Inflection
           </Button>
           
-          <Button type="submit" variant="contained" color="primary">
-            Save Word
-          </Button>
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Button type="submit" variant="contained" color="primary">
+              {wordToEdit ? 'Update Word' : 'Save Word'}
+            </Button>
+            {onCancel && (
+              <Button onClick={onCancel} variant="outlined">
+                Cancel
+              </Button>
+            )}
+          </Box>
         </Stack>
       </form>
       <Snackbar
@@ -133,7 +155,7 @@ export default function WordForm() {
         onClose={() => setShowSuccess(false)}
       >
         <Alert onClose={() => setShowSuccess(false)} severity="success">
-          Word saved successfully!
+          {wordToEdit ? 'Word updated successfully!' : 'Word saved successfully!'}
         </Alert>
       </Snackbar>
     </Paper>

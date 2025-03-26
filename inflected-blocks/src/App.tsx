@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, CssBaseline, Container, AppBar, Toolbar, Typography, Box } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import WordForm from './components/WordForm';
 import WordList from './components/WordList';
+import { Word } from './types/word';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -21,6 +22,16 @@ const theme = createTheme({
 });
 
 function App() {
+  const [editingWord, setEditingWord] = useState<Word | undefined>();
+
+  const handleEdit = (word: Word) => {
+    setEditingWord(word);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingWord(undefined);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -40,8 +51,11 @@ function App() {
                   <Typography variant="h4" component="h1" gutterBottom>
                     Welcome to Inflected Blocks
                   </Typography>
-                  <WordForm />
-                  <WordList />
+                  <WordForm
+                    wordToEdit={editingWord}
+                    onCancel={handleCancelEdit}
+                  />
+                  <WordList onEdit={handleEdit} />
                 </>
               } />
             </Routes>

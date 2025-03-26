@@ -14,7 +14,11 @@ import { Word } from '../types/word';
 import { getWords, deleteWord } from '../utils/wordStorage';
 import { subscribeToWordUpdates } from '../utils/events';
 
-export default function WordList() {
+interface WordListProps {
+  onEdit: (word: Word) => void;
+}
+
+export default function WordList({ onEdit }: WordListProps) {
   const [words, setWords] = useState<Word[]>([]);
 
   useEffect(() => {
@@ -86,13 +90,21 @@ export default function WordList() {
                 }
               />
               <ListItemSecondaryAction>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  onClick={() => handleDelete(index)}
-                >
-                  Delete
-                </Button>
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Button
+                    variant="outlined"
+                    onClick={() => onEdit(word)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => handleDelete(index)}
+                  >
+                    Delete
+                  </Button>
+                </Box>
               </ListItemSecondaryAction>
             </ListItem>
             {index < words.length - 1 && <Divider />}
