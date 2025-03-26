@@ -8,8 +8,12 @@ import {
   Stack,
   Snackbar,
   Alert,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from '@mui/material';
-import { Word, Inflection } from '../types/word';
+import { Word, Inflection, WordType } from '../types/word';
 import { saveWord, updateWord, getWords } from '../utils/wordStorage';
 import { notifyWordUpdates } from '../utils/events';
 
@@ -23,6 +27,7 @@ export default function WordForm({ wordToEdit, onCancel, onWordUpdate }: WordFor
   const [word, setWord] = useState<Word>({
     lemma: '',
     translation: '',
+    wordType: WordType.Other,
     inflections: [{ form: '', description: '' }],
   });
   const [showSuccess, setShowSuccess] = useState(false);
@@ -73,6 +78,7 @@ export default function WordForm({ wordToEdit, onCancel, onWordUpdate }: WordFor
     setWord({
       lemma: '',
       translation: '',
+      wordType: WordType.Other,
       inflections: [{ form: '', description: '' }],
     });
     setShowSuccess(true);
@@ -100,6 +106,20 @@ export default function WordForm({ wordToEdit, onCancel, onWordUpdate }: WordFor
             fullWidth
             required
           />
+          <FormControl fullWidth required>
+            <InputLabel>Word Type</InputLabel>
+            <Select
+              value={word.wordType}
+              label="Word Type"
+              onChange={(e) => setWord({ ...word, wordType: e.target.value as WordType })}
+            >
+              {Object.values(WordType).map((type) => (
+                <MenuItem key={type} value={type}>
+                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           
           <Typography variant="subtitle1" gutterBottom>
             Inflections

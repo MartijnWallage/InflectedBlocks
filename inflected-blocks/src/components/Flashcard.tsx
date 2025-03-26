@@ -4,8 +4,9 @@ import {
   Typography,
   Box,
   Stack,
+  Chip,
 } from '@mui/material';
-import { Word } from '../types/word';
+import { Word, WordType } from '../types/word';
 
 interface FlashcardProps {
   word: Word;
@@ -13,7 +14,32 @@ interface FlashcardProps {
   onFlip: () => void;
 }
 
+const getWordTypeColor = (wordType: WordType) => {
+  switch (wordType) {
+    case WordType.Verb:
+      return '#1976d2'; // Blue
+    case WordType.Noun:
+      return '#2e7d32'; // Green
+    case WordType.Adjective:
+      return '#ed6c02'; // Orange
+    case WordType.Adverb:
+      return '#9c27b0'; // Purple
+    case WordType.Conjunction:
+      return '#d32f2f'; // Red
+    case WordType.Preposition:
+      return '#0288d1'; // Light Blue
+    case WordType.Pronoun:
+      return '#7b1fa2'; // Deep Purple
+    case WordType.Article:
+      return '#455a64'; // Blue Grey
+    default:
+      return '#757575'; // Grey
+  }
+};
+
 export default function Flashcard({ word, isFlipped, onFlip }: FlashcardProps) {
+  const wordTypeColor = getWordTypeColor(word.wordType);
+
   return (
     <Paper
       elevation={3}
@@ -29,6 +55,7 @@ export default function Flashcard({ word, isFlipped, onFlip }: FlashcardProps) {
         transition: 'transform 0.6s',
         transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0)',
         position: 'relative',
+        borderTop: `4px solid ${wordTypeColor}`,
       }}
       onClick={onFlip}
     >
@@ -39,9 +66,22 @@ export default function Flashcard({ word, isFlipped, onFlip }: FlashcardProps) {
         }}
       >
         <Stack spacing={2}>
-          <Typography variant="h4" component="div" align="center">
-            {word.lemma}
-          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
+            <Typography variant="h4" component="div" align="center">
+              {word.lemma}
+            </Typography>
+            <Chip
+              label={word.wordType}
+              size="small"
+              sx={{
+                backgroundColor: wordTypeColor,
+                color: 'white',
+                '& .MuiChip-label': {
+                  textTransform: 'capitalize',
+                },
+              }}
+            />
+          </Box>
           <Box>
             {word.inflections.map((inflection, index) => (
               <Typography
