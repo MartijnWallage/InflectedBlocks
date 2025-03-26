@@ -16,9 +16,10 @@ import { subscribeToWordUpdates } from '../utils/events';
 
 interface WordListProps {
   onEdit: (word: Word) => void;
+  onWordUpdate: (words: Word[]) => void;
 }
 
-export default function WordList({ onEdit }: WordListProps) {
+export default function WordList({ onEdit, onWordUpdate }: WordListProps) {
   const [words, setWords] = useState<Word[]>([]);
 
   useEffect(() => {
@@ -31,7 +32,9 @@ export default function WordList({ onEdit }: WordListProps) {
 
   const handleDelete = (index: number) => {
     deleteWord(index);
-    setWords(getWords());
+    const updatedWords = getWords();
+    setWords(updatedWords);
+    onWordUpdate(updatedWords);
   };
 
   if (words.length === 0) {

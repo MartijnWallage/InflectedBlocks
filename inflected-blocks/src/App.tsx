@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, CssBaseline, Container, AppBar, Toolbar, Typography, Box, Tabs, Tab } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
@@ -7,7 +7,7 @@ import WordList from './components/WordList';
 import FlashcardReview from './components/FlashcardReview';
 import SentenceBuilder from './components/SentenceBuilder';
 import { Word } from './types/word';
-import { getWords } from './utils/wordStorage';
+import { getWords, saveWords } from './utils/wordStorage';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -29,6 +29,10 @@ function App() {
   const [currentTab, setCurrentTab] = useState(0);
   const [words, setWords] = useState<Word[]>(getWords());
 
+  useEffect(() => {
+    saveWords(words);
+  }, [words]);
+
   const handleEdit = (word: Word) => {
     setEditingWord(word);
   };
@@ -39,6 +43,10 @@ function App() {
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
+  };
+
+  const handleWordUpdate = (updatedWords: Word[]) => {
+    setWords(updatedWords);
   };
 
   return (
@@ -72,8 +80,12 @@ function App() {
                       <WordForm
                         wordToEdit={editingWord}
                         onCancel={handleCancelEdit}
+                        onWordUpdate={handleWordUpdate}
                       />
-                      <WordList onEdit={handleEdit} />
+                      <WordList 
+                        onEdit={handleEdit} 
+                        onWordUpdate={handleWordUpdate}
+                      />
                     </>
                   ) : currentTab === 1 ? (
                     <FlashcardReview words={words} />

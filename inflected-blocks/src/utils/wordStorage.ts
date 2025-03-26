@@ -2,6 +2,10 @@ import { Word } from '../types/word';
 
 const STORAGE_KEY = 'inflected-blocks-words';
 
+export const saveWords = (words: Word[]): void => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(words));
+};
+
 export const saveWord = (word: Word): void => {
   const existingWords = getWords();
   existingWords.push(word);

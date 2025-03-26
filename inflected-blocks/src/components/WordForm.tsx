@@ -10,15 +10,16 @@ import {
   Alert,
 } from '@mui/material';
 import { Word, Inflection } from '../types/word';
-import { saveWord, updateWord } from '../utils/wordStorage';
+import { saveWord, updateWord, getWords } from '../utils/wordStorage';
 import { notifyWordUpdates } from '../utils/events';
 
 interface WordFormProps {
   wordToEdit?: Word;
   onCancel?: () => void;
+  onWordUpdate: (words: Word[]) => void;
 }
 
-export default function WordForm({ wordToEdit, onCancel }: WordFormProps) {
+export default function WordForm({ wordToEdit, onCancel, onWordUpdate }: WordFormProps) {
   const [word, setWord] = useState<Word>({
     lemma: '',
     translation: '',
@@ -58,10 +59,16 @@ export default function WordForm({ wordToEdit, onCancel }: WordFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const currentWords = getWords();
     if (wordToEdit) {
       updateWord(wordToEdit, word);
+      const updatedWords = currentWords.map((w: Word) => 
+        w.lemma === wordToEdit.lemma && w.translation === wordToEdit.translation ? word : w
+      );
+      onWordUpdate(updatedWords);
     } else {
       saveWord(word);
+      onWordUpdate([...currentWords, word]);
     }
     setWord({
       lemma: '',
