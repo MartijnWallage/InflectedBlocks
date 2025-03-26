@@ -5,6 +5,7 @@ import { createTheme } from '@mui/material/styles';
 import WordForm from './components/WordForm';
 import WordList from './components/WordList';
 import FlashcardReview from './components/FlashcardReview';
+import SentenceBuilder from './components/SentenceBuilder';
 import { Word } from './types/word';
 import { getWords } from './utils/wordStorage';
 import '@fontsource/roboto/300.css';
@@ -63,6 +64,7 @@ function App() {
                     <Tabs value={currentTab} onChange={handleTabChange}>
                       <Tab label="Manage Words" />
                       <Tab label="Review" />
+                      <Tab label="Build Sentences" />
                     </Tabs>
                   </Box>
                   {currentTab === 0 ? (
@@ -73,8 +75,10 @@ function App() {
                       />
                       <WordList onEdit={handleEdit} />
                     </>
-                  ) : (
+                  ) : currentTab === 1 ? (
                     <FlashcardReview words={words} />
+                  ) : (
+                    <SentenceBuilder words={words} />
                   )}
                 </>
               } />
