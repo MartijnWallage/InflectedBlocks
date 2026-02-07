@@ -280,6 +280,15 @@ def display_success(message: str = "Correct! Well done!"):
     console.print(f"\n  [bold green]✓ {message}[/bold green]\n")
 
 
+def display_translation_mismatch(mismatches: list[str]):
+    """Display grammar-OK but wrong-translation feedback."""
+    console.print("\n  [bold green]✓ Grammatically correct![/bold green]")
+    console.print("  [yellow]But not quite the right translation:[/yellow]")
+    for msg in mismatches:
+        console.print(f"  [yellow]⚠ {msg}[/yellow]")
+    console.print()
+
+
 def display_prompt(english: str, hint: str = ""):
     """Display a sentence construction prompt."""
     content = Text()

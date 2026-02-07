@@ -7,7 +7,7 @@ from grammar import check_sentence, POS_TO_SYMBOL
 from ui import (
     console, display_prompt, display_errors, display_success,
     display_parse_tree, display_sentence_tokens, display_word_list_compact,
-    prompt_input, clear,
+    display_translation_mismatch, prompt_input, clear,
 )
 
 
@@ -63,6 +63,172 @@ def _show_token_analysis(tokens: list[str]):
             console.print(f"  [dim]{token}: {' | '.join(parts)}[/dim]")
 
 
+def _extract_np(node) -> dict:
+    """Extract noun and adjective lemmas from an NP node."""
+    result = {}
+    for child in node.children:
+        if child.symbol == "N":
+            result["noun"] = child.features.get("lemma")
+        elif child.symbol == "Adj":
+            result["adj"] = child.features.get("lemma")
+    # Bare noun (NP → N)
+    if node.is_leaf() and node.symbol == "N":
+        result["noun"] = node.features.get("lemma")
+    return result
+
+
+def _extract_pp(node) -> dict:
+    """Extract prep lemma and NP contents from a PP node."""
+    result = {}
+    for child in node.children:
+        if child.symbol == "Prep":
+            result["prep"] = child.features.get("lemma")
+        elif child.symbol == "NP":
+            np_info = _extract_np(child)
+            result["noun"] = np_info.get("noun")
+            if "adj" in np_info:
+                result["adj"] = np_info["adj"]
+    return result
+
+
+def extract_roles(tree) -> dict:
+    """Walk the parse tree and extract grammatical roles.
+
+    Returns a dict with keys like "subject", "verb", "object", "pp".
+    For compound sentences (S Conj S), returns {"compound": True}.
+    """
+    if tree.symbol != "S":
+        return {}
+
+    children_syms = [c.symbol for c in tree.children]
+
+    # S → S Conj S
+    if children_syms == ["S", "Conj", "S"]:
+        return {"compound": True}
+
+    roles: dict = {}
+
+    # S → NP VP
+    if children_syms == ["NP", "VP"]:
+        roles["subject"] = _extract_np(tree.children[0])
+        vp = tree.children[1]
+    # S → VP (pro-drop)
+    elif children_syms == ["VP"]:
+        vp = tree.children[0]
+    else:
+        return {}
+
+    # Extract from VP
+    for child in vp.children:
+        if child.symbol == "V":
+            roles["verb"] = child.features.get("lemma")
+        elif child.symbol == "NP":
+            roles["object"] = _extract_np(child)
+        elif child.symbol == "PP":
+            roles["pp"] = _extract_pp(child)
+
+    return roles
+
+
+def _meaning(lemma: str) -> str:
+    """Get the English meaning of a Greek lemma."""
+    entry = WORDS.get(lemma)
+    if entry:
+        return entry.get("meaning", lemma)
+    return lemma
+
+
+def check_translation(actual: dict, expected: dict) -> tuple[bool, list[str]]:
+    """Compare extracted roles against expected roles.
+
+    Returns (match, list_of_mismatch_messages).
+    """
+    mismatches: list[str] = []
+
+    if actual.get("compound"):
+        mismatches.append("Expected a simple sentence, not a compound one")
+        return False, mismatches
+
+    # Check verb
+    exp_verb = expected.get("verb")
+    act_verb = actual.get("verb")
+    if exp_verb and act_verb != exp_verb:
+        mismatches.append(
+            f'Expected verb "{_meaning(exp_verb)}" ({exp_verb}), '
+            f'got "{_meaning(act_verb)}" ({act_verb})' if act_verb
+            else f'Expected verb "{_meaning(exp_verb)}" ({exp_verb}), but none found'
+        )
+
+    # Check subject
+    exp_subj = expected.get("subject")
+    act_subj = actual.get("subject")
+    if exp_subj:
+        if not act_subj:
+            mismatches.append("Expected a subject noun phrase, but none found")
+        else:
+            _check_np_role("subject", exp_subj, act_subj, mismatches)
+    elif act_subj:
+        mismatches.append("Unexpected subject — the prompt doesn't have one")
+
+    # Check object
+    exp_obj = expected.get("object")
+    act_obj = actual.get("object")
+    if exp_obj:
+        if not act_obj:
+            mismatches.append("Expected an object noun phrase, but none found")
+        else:
+            _check_np_role("object", exp_obj, act_obj, mismatches)
+    elif act_obj:
+        mismatches.append("Unexpected object — the prompt doesn't have one")
+
+    # Check PP
+    exp_pp = expected.get("pp")
+    act_pp = actual.get("pp")
+    if exp_pp:
+        if not act_pp:
+            mismatches.append("Expected a prepositional phrase, but none found")
+        else:
+            if exp_pp.get("prep") and act_pp.get("prep") != exp_pp["prep"]:
+                mismatches.append(
+                    f'Expected preposition "{_meaning(exp_pp["prep"])}" ({exp_pp["prep"]}), '
+                    f'got "{_meaning(act_pp.get("prep"))}" ({act_pp.get("prep")})'
+                )
+            if exp_pp.get("noun") and act_pp.get("noun") != exp_pp["noun"]:
+                mismatches.append(
+                    f'In PP: expected noun "{_meaning(exp_pp["noun"])}" ({exp_pp["noun"]}), '
+                    f'got "{_meaning(act_pp.get("noun"))}" ({act_pp.get("noun")})'
+                )
+    elif act_pp:
+        mismatches.append("Unexpected prepositional phrase — the prompt doesn't have one")
+
+    return len(mismatches) == 0, mismatches
+
+
+def _check_np_role(role: str, expected_np: dict, actual_np: dict,
+                   mismatches: list[str]):
+    """Compare an expected NP (noun + optional adj) against actual."""
+    exp_noun = expected_np.get("noun")
+    act_noun = actual_np.get("noun")
+    if exp_noun and act_noun != exp_noun:
+        mismatches.append(
+            f'In {role}: expected "{_meaning(exp_noun)}" ({exp_noun}), '
+            f'got "{_meaning(act_noun)}" ({act_noun})'
+        )
+
+    exp_adj = expected_np.get("adj")
+    act_adj = actual_np.get("adj")
+    if exp_adj and act_adj != exp_adj:
+        mismatches.append(
+            f'In {role}: expected adjective "{_meaning(exp_adj)}" ({exp_adj}), '
+            f'got "{_meaning(act_adj)}" ({act_adj})' if act_adj
+            else f'In {role}: expected adjective "{_meaning(exp_adj)}" ({exp_adj}), but none found'
+        )
+    elif not exp_adj and act_adj:
+        mismatches.append(
+            f'In {role}: unexpected adjective "{_meaning(act_adj)}" ({act_adj})'
+        )
+
+
 def sentence_construction_loop(prompt: dict, user_vocab: list[str]) -> bool:
     """Interactive loop for building a sentence. Returns True if completed."""
     current_tokens: list[str] = []
@@ -92,9 +258,20 @@ def sentence_construction_loop(prompt: dict, user_vocab: list[str]) -> bool:
 
             if success and tree:
                 display_parse_tree(tree)
-                display_success()
-                prompt_input("Press Enter to continue...")
-                return True
+                expected = prompt.get("expected")
+                if expected:
+                    actual_roles = extract_roles(tree)
+                    match, msgs = check_translation(actual_roles, expected)
+                    if match:
+                        display_success()
+                        prompt_input("Press Enter to continue...")
+                        return True
+                    else:
+                        display_translation_mismatch(msgs)
+                else:
+                    display_success()
+                    prompt_input("Press Enter to continue...")
+                    return True
             else:
                 display_errors(errors)
         else:
