@@ -64,7 +64,7 @@ def display_main_menu():
     console.print(panel)
 
 
-def display_flashcard(lemma: str, revealed: bool = False):
+def display_flashcard(lemma: str, revealed: bool = False, in_vocabulary: bool = False):
     """Display a flashcard for a word."""
     entry = WORDS.get(lemma)
     if not entry:
@@ -164,9 +164,11 @@ def display_flashcard(lemma: str, revealed: bool = False):
         rating.append("  [1] ", style="bold green")
         rating.append("Easy   ")
         rating.append("[2] ", style="bold red")
-        rating.append("Hard   ")
-        rating.append("[3] ", style="bold cyan")
-        rating.append("Add to vocabulary")
+        rating.append("Hard")
+        if not in_vocabulary:
+            rating.append("   ")
+            rating.append("[3] ", style="bold cyan")
+            rating.append("Add to vocabulary")
 
         parts = [header_text, Text("")]
         if tbl is not None:
@@ -329,19 +331,19 @@ def display_vocabulary_list(vocabulary: list[str]):
         border_style="bright_blue",
         show_lines=True,
     )
+    table.add_column("#", style="cyan", justify="right")
     table.add_column("Greek", style="bold bright_white", justify="center")
     table.add_column("POS", style="dim")
     table.add_column("Meaning", style="green")
-    table.add_column("Box", style="cyan", justify="center")
 
-    for lemma in vocabulary:
+    for i, lemma in enumerate(vocabulary, 1):
         entry = WORDS.get(lemma)
         if entry:
             table.add_row(
+                str(i),
                 lemma,
                 entry["pos"],
                 entry["meaning"],
-                "",
             )
     console.print(table)
 

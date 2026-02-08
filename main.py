@@ -86,12 +86,12 @@ def review_flashcards(data: dict) -> None:
         clear()
         console.print(f"\n  [dim]Card {i + 1}/{len(due)}[/dim]\n")
 
-        display_flashcard(lemma, revealed=False)
+        display_flashcard(lemma, revealed=False, in_vocabulary=True)
         prompt_input("Press Enter to reveal...")
 
         clear()
         console.print()
-        display_flashcard(lemma, revealed=True)
+        display_flashcard(lemma, revealed=True, in_vocabulary=True)
 
         while True:
             choice = prompt_input("Your choice (1=easy, 2=hard)> ").strip()
@@ -116,14 +116,55 @@ def review_flashcards(data: dict) -> None:
 
 
 def view_vocabulary(data: dict) -> None:
-    """Display the user's learned vocabulary."""
-    console.print()
-    display_vocabulary_list(data.get("vocabulary", []))
-    completed = data.get("sentences_completed", 0)
-    if completed:
-        console.print(f"\n  [dim]Sentences completed: {completed}[/dim]")
-    console.print()
-    prompt_input("Press Enter to return...")
+    """Display the user's learned vocabulary, allow selecting a word to view."""
+    vocabulary = data.get("vocabulary", [])
+
+    while True:
+        clear()
+        console.print()
+        display_vocabulary_list(vocabulary)
+        completed = data.get("sentences_completed", 0)
+        if completed:
+            console.print(f"\n  [dim]Sentences completed: {completed}[/dim]")
+        console.print()
+
+        if not vocabulary:
+            prompt_input("Press Enter to return...")
+            return
+
+        console.print("  [dim]Enter a number to view a word, or press Enter to return.[/dim]")
+        choice = prompt_input("> ").strip()
+
+        if not choice:
+            return
+
+        try:
+            idx = int(choice) - 1
+            if 0 <= idx < len(vocabulary):
+                lemma = vocabulary[idx]
+                clear()
+                console.print()
+                display_flashcard(lemma, revealed=True, in_vocabulary=True)
+                while True:
+                    choice = prompt_input("Your choice (1=easy, 2=hard)> ").strip()
+                    if choice == "1":
+                        review_flashcard(data, lemma, easy=True)
+                        save_user_data(data)
+                        console.print("  [green]Nice! Moving to next box.[/green]")
+                        break
+                    elif choice == "2":
+                        review_flashcard(data, lemma, easy=False)
+                        save_user_data(data)
+                        console.print("  [yellow]Reset to box 1. You'll see it again soon.[/yellow]")
+                        break
+                    else:
+                        console.print("  [dim]Press 1 (easy) or 2 (hard)[/dim]")
+                prompt_input("Press Enter to go back...")
+            else:
+                console.print("  [red]Invalid number.[/red]")
+                prompt_input("Press Enter...")
+        except ValueError:
+            return
 
 
 def main():
