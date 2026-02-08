@@ -919,13 +919,13 @@ PROMPTS: list[dict] = [
     },
     {
         "english": "The soldier writes a book.",
-        "hint": "Subject (nom) + verb (3sg pres act) + object (acc)",
+        "hint": "Subject (nom) + verb (3sg pres act) + object (acc, no article)",
         "required_lemmas": ["ὁ", "στρατιώτης", "γράφω", "βιβλίον"],
         "expected": {
             "subject": {"noun": "στρατιώτης"},
             "verb": "γράφω",
             "tense": "pres",
-            "object": {"noun": "βιβλίον"},
+            "object": {"noun": "βιβλίον", "indef": True},
         },
     },
     {
@@ -941,13 +941,13 @@ PROMPTS: list[dict] = [
     },
     {
         "english": "The god sends a gift.",
-        "hint": "Subject (nom) + verb (3sg pres act) + object (acc)",
+        "hint": "Subject (nom) + verb (3sg pres act) + object (acc, no article)",
         "required_lemmas": ["ὁ", "θεός", "πέμπω", "δῶρον"],
         "expected": {
             "subject": {"noun": "θεός"},
             "verb": "πέμπω",
             "tense": "pres",
-            "object": {"noun": "δῶρον"},
+            "object": {"noun": "δῶρον", "indef": True},
         },
     },
     {
@@ -1032,13 +1032,13 @@ PROMPTS: list[dict] = [
     },
     {
         "english": "The soldier was writing a book.",
-        "hint": "Subject (nom) + verb (3sg impf act) + object (acc)",
+        "hint": "Subject (nom) + verb (3sg impf act) + object (acc, no article)",
         "required_lemmas": ["ὁ", "στρατιώτης", "γράφω", "βιβλίον"],
         "expected": {
             "subject": {"noun": "στρατιώτης"},
             "verb": "γράφω",
             "tense": "impf",
-            "object": {"noun": "βιβλίον"},
+            "object": {"noun": "βιβλίον", "indef": True},
         },
     },
     {
@@ -1066,13 +1066,13 @@ PROMPTS: list[dict] = [
     },
     {
         "english": "The god will send a gift.",
-        "hint": "Subject (nom) + verb (3sg fut act) + object (acc)",
+        "hint": "Subject (nom) + verb (3sg fut act) + object (acc, no article)",
         "required_lemmas": ["ὁ", "θεός", "πέμπω", "δῶρον"],
         "expected": {
             "subject": {"noun": "θεός"},
             "verb": "πέμπω",
             "tense": "fut",
-            "object": {"noun": "δῶρον"},
+            "object": {"noun": "δῶρον", "indef": True},
         },
     },
     {
@@ -1101,13 +1101,13 @@ PROMPTS: list[dict] = [
     },
     {
         "english": "The soldier wrote a book.",
-        "hint": "Subject (nom) + verb (3sg aor act) + object (acc)",
+        "hint": "Subject (nom) + verb (3sg aor act) + object (acc, no article)",
         "required_lemmas": ["ὁ", "στρατιώτης", "γράφω", "βιβλίον"],
         "expected": {
             "subject": {"noun": "στρατιώτης"},
             "verb": "γράφω",
             "tense": "aor",
-            "object": {"noun": "βιβλίον"},
+            "object": {"noun": "βιβλίον", "indef": True},
         },
     },
     {

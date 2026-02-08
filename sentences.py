@@ -66,9 +66,11 @@ def _show_token_analysis(tokens: list[str]):
 
 def _extract_np(node) -> dict:
     """Extract noun and adjective lemmas from an NP node."""
-    result = {}
+    result = {"has_article": False}
     for child in node.children:
-        if child.symbol == "N":
+        if child.symbol == "Art":
+            result["has_article"] = True
+        elif child.symbol == "N":
             result["noun"] = child.features.get("lemma")
         elif child.symbol == "Adj":
             result["adj"] = child.features.get("lemma")
@@ -242,6 +244,18 @@ def _check_np_role(role: str, expected_np: dict, actual_np: dict,
         mismatches.append(
             f'In {role}: unexpected adjective "{_meaning(act_adj)}" ({act_adj})'
         )
+
+    # Check article: indefinite NPs must not have one, definite NPs must
+    if expected_np.get("indef"):
+        if actual_np.get("has_article"):
+            mismatches.append(
+                f'In {role}: indefinite noun phrase should not have an article in Greek'
+            )
+    else:
+        if not actual_np.get("has_article"):
+            mismatches.append(
+                f'In {role}: definite noun phrase requires an article in Greek'
+            )
 
 
 def sentence_construction_loop(prompt: dict, user_vocab: list[str]) -> bool:
