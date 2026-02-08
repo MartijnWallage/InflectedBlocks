@@ -124,18 +124,21 @@ def display_flashcard(lemma: str, revealed: bool = False):
                         tbl.add_row(f"{case}.{number}", forms[key])
 
         elif pos == "verb":
-            tbl = Table(show_header=False, box=None, padding=(0, 1),
+            tenses = ["pres", "impf", "fut", "aor"]
+            tbl = Table(show_header=True, box=None, padding=(0, 1),
                         pad_edge=False)
-            tbl.add_column(style="dim")
-            tbl.add_column(style="bright_white")
+            tbl.add_column("", style="dim")
+            for t in tenses:
+                tbl.add_column(t, style="bright_white")
             for number in ("sg", "pl"):
                 if number == "pl":
-                    tbl.add_row("", "")
+                    tbl.add_row("", "", "", "", "")
                 for person in ("1", "2", "3"):
-                    key = f"pres_act_ind_{person}{number}"
-                    if key in forms:
-                        tbl.add_row(f"pres.act.{person}{number}",
-                                    forms[key])
+                    row = [f"{person}{number}"]
+                    for t in tenses:
+                        key = f"{t}_act_ind_{person}{number}"
+                        row.append(forms.get(key, ""))
+                    tbl.add_row(*row)
 
         elif pos in ("article", "adjective"):
             tbl = Table(show_header=False, box=None, padding=(0, 1),
@@ -286,6 +289,15 @@ def display_translation_mismatch(mismatches: list[str]):
     console.print("  [yellow]But not quite the right translation:[/yellow]")
     for msg in mismatches:
         console.print(f"  [yellow]⚠ {msg}[/yellow]")
+    console.print()
+
+
+def display_accent_feedback(errors: list[str]):
+    """Display grammar+translation OK but accentuation errors."""
+    console.print("\n  [bold green]✓ Grammar and translation correct![/bold green]")
+    console.print("  [yellow]⚠ Accentuation:[/yellow]")
+    for err in errors:
+        console.print(f"    [yellow]⚠ {err}[/yellow]")
     console.print()
 
 

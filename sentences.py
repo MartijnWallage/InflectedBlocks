@@ -4,10 +4,11 @@ from __future__ import annotations
 
 from data import PROMPTS, WORDS, lookup_form
 from grammar import check_sentence, POS_TO_SYMBOL
+from accentuation import check_accentuation
 from ui import (
     console, display_prompt, display_errors, display_success,
     display_parse_tree, display_sentence_tokens, display_word_list_compact,
-    display_translation_mismatch, prompt_input, clear,
+    display_translation_mismatch, display_accent_feedback, prompt_input, clear,
 )
 
 
@@ -122,6 +123,7 @@ def extract_roles(tree) -> dict:
     for child in vp.children:
         if child.symbol == "V":
             roles["verb"] = child.features.get("lemma")
+            roles["tense"] = child.features.get("tense")
         elif child.symbol == "NP":
             roles["object"] = _extract_np(child)
         elif child.symbol == "PP":
@@ -157,6 +159,19 @@ def check_translation(actual: dict, expected: dict) -> tuple[bool, list[str]]:
             f'Expected verb "{_meaning(exp_verb)}" ({exp_verb}), '
             f'got "{_meaning(act_verb)}" ({act_verb})' if act_verb
             else f'Expected verb "{_meaning(exp_verb)}" ({exp_verb}), but none found'
+        )
+
+    # Check tense
+    exp_tense = expected.get("tense")
+    act_tense = actual.get("tense")
+    if exp_tense and act_tense != exp_tense:
+        tense_names = {
+            "pres": "present", "impf": "imperfect",
+            "fut": "future", "aor": "aorist",
+        }
+        mismatches.append(
+            f'Expected {tense_names.get(exp_tense, exp_tense)} tense, '
+            f'got {tense_names.get(act_tense, act_tense)}'
         )
 
     # Check subject
@@ -263,15 +278,23 @@ def sentence_construction_loop(prompt: dict, user_vocab: list[str]) -> bool:
                     actual_roles = extract_roles(tree)
                     match, msgs = check_translation(actual_roles, expected)
                     if match:
+                        accent_ok, accent_errors = check_accentuation(current_tokens)
+                        if accent_ok:
+                            display_success()
+                            prompt_input("Press Enter to continue...")
+                            return True
+                        else:
+                            display_accent_feedback(accent_errors)
+                    else:
+                        display_translation_mismatch(msgs)
+                else:
+                    accent_ok, accent_errors = check_accentuation(current_tokens)
+                    if accent_ok:
                         display_success()
                         prompt_input("Press Enter to continue...")
                         return True
                     else:
-                        display_translation_mismatch(msgs)
-                else:
-                    display_success()
-                    prompt_input("Press Enter to continue...")
-                    return True
+                        display_accent_feedback(accent_errors)
             else:
                 display_errors(errors)
         else:
