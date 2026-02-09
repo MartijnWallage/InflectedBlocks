@@ -125,20 +125,25 @@ def display_flashcard(lemma: str, revealed: bool = False, in_vocabulary: bool = 
 
         elif pos == "verb":
             tenses = ["pres", "impf", "fut", "aor"]
-            tbl = Table(show_header=True, box=None, padding=(0, 1),
-                        pad_edge=False)
-            tbl.add_column("", style="dim")
-            for t in tenses:
-                tbl.add_column(t, style="bright_white")
-            for number in ("sg", "pl"):
-                if number == "pl":
-                    tbl.add_row("", "", "", "", "")
-                for person in ("1", "2", "3"):
-                    row = [f"{person}{number}"]
-                    for t in tenses:
-                        key = f"{t}_act_ind_{person}{number}"
-                        row.append(forms.get(key, ""))
-                    tbl.add_row(*row)
+            voices = [("act", "Active"), ("mid", "Middle")]
+            verb_tables = []
+            for voice_key, voice_label in voices:
+                voice_tbl = Table(show_header=True, box=None, padding=(0, 1),
+                                  pad_edge=False)
+                voice_tbl.add_column("", style="dim")
+                for t in tenses:
+                    voice_tbl.add_column(t, style="bright_white")
+                for number in ("sg", "pl"):
+                    if number == "pl":
+                        voice_tbl.add_row("", "", "", "", "")
+                    for person in ("1", "2", "3"):
+                        row = [f"{person}{number}"]
+                        for t in tenses:
+                            key = f"{t}_{voice_key}_ind_{person}{number}"
+                            row.append(forms.get(key, ""))
+                        voice_tbl.add_row(*row)
+                verb_tables.append((voice_label, voice_tbl))
+            tbl = verb_tables
 
         elif pos in ("article", "adjective"):
             tbl = Table(show_header=False, box=None, padding=(0, 1),
@@ -171,7 +176,12 @@ def display_flashcard(lemma: str, revealed: bool = False, in_vocabulary: bool = 
             rating.append("Add to vocabulary")
 
         parts = [header_text, Text("")]
-        if tbl is not None:
+        if pos == "verb" and isinstance(tbl, list):
+            for voice_label, voice_tbl in tbl:
+                parts.append(Text(f"  {voice_label}", style="bold dim"))
+                parts.append(voice_tbl)
+                parts.append(Text(""))
+        elif tbl is not None:
             parts.append(tbl)
         parts.append(Text(""))
         parts.append(rating)

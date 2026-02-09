@@ -126,6 +126,7 @@ def extract_roles(tree) -> dict:
         if child.symbol == "V":
             roles["verb"] = child.features.get("lemma")
             roles["tense"] = child.features.get("tense")
+            roles["voice"] = child.features.get("voice")
         elif child.symbol == "NP":
             roles["object"] = _extract_np(child)
         elif child.symbol == "PP":
@@ -174,6 +175,16 @@ def check_translation(actual: dict, expected: dict) -> tuple[bool, list[str]]:
         mismatches.append(
             f'Expected {tense_names.get(exp_tense, exp_tense)} tense, '
             f'got {tense_names.get(act_tense, act_tense)}'
+        )
+
+    # Check voice
+    exp_voice = expected.get("voice")
+    act_voice = actual.get("voice")
+    if exp_voice and act_voice != exp_voice:
+        voice_names = {"act": "active", "mid": "middle"}
+        mismatches.append(
+            f'Expected {voice_names.get(exp_voice, exp_voice)} voice, '
+            f'got {voice_names.get(act_voice, act_voice)}'
         )
 
     # Check subject

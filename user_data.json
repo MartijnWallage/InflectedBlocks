@@ -112,40 +112,40 @@
       "next_review": "2026-02-09"
     },
     "γράφω": {
-      "box": 2,
+      "box": 1,
       "next_review": "2026-02-09"
     },
     "παιδεύω": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 1,
+      "next_review": "2026-02-10"
     },
     "πέμπω": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 3,
+      "next_review": "2026-02-13"
     },
     "φέρω": {
       "box": 1,
-      "next_review": "2026-02-09"
+      "next_review": "2026-02-10"
     },
     "ἄγω": {
       "box": 1,
-      "next_review": "2026-02-09"
+      "next_review": "2026-02-10"
     },
     "λέγω": {
-      "box": 3,
-      "next_review": "2026-02-11"
+      "box": 1,
+      "next_review": "2026-02-10"
     },
     "ἔχω": {
       "box": 1,
-      "next_review": "2026-02-09"
+      "next_review": "2026-02-10"
     },
     "βλέπω": {
-      "box": 3,
-      "next_review": "2026-02-11"
+      "box": 4,
+      "next_review": "2026-02-22"
     },
     "διδάσκω": {
-      "box": 1,
-      "next_review": "2026-02-09"
+      "box": 2,
+      "next_review": "2026-02-10"
     },
     "ἀγαθός": {
       "box": 2,
@@ -160,8 +160,8 @@
       "next_review": "2026-02-09"
     },
     "σοφός": {
-      "box": 1,
-      "next_review": "2026-02-09"
+      "box": 2,
+      "next_review": "2026-02-10"
     },
     "μικρός": {
       "box": 2,
@@ -180,33 +180,33 @@
       "next_review": "2026-02-09"
     },
     "ἐν": {
-      "box": 3,
-      "next_review": "2026-02-11"
+      "box": 4,
+      "next_review": "2026-02-22"
     },
     "εἰς": {
       "box": 1,
       "next_review": "2026-02-09"
     },
     "ἐκ": {
-      "box": 4,
-      "next_review": "2026-02-20"
+      "box": 5,
+      "next_review": "2026-03-10"
     },
     "πρός": {
-      "box": 3,
-      "next_review": "2026-02-11"
+      "box": 4,
+      "next_review": "2026-02-22"
     },
     "ἀπό": {
-      "box": 3,
-      "next_review": "2026-02-11"
+      "box": 4,
+      "next_review": "2026-02-22"
     },
     "καί": {
-      "box": 3,
-      "next_review": "2026-02-11"
+      "box": 4,
+      "next_review": "2026-02-22"
     },
     "ἀλλά": {
-      "box": 3,
-      "next_review": "2026-02-11"
+      "box": 4,
+      "next_review": "2026-02-22"
     }
   },
-  "sentences_completed": 33
+  "sentences_completed": 42
 }
