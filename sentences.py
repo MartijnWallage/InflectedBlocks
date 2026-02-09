@@ -181,11 +181,17 @@ def check_translation(actual: dict, expected: dict) -> tuple[bool, list[str]]:
     exp_voice = expected.get("voice")
     act_voice = actual.get("voice")
     if exp_voice and act_voice != exp_voice:
-        voice_names = {"act": "active", "mid": "middle"}
-        mismatches.append(
-            f'Expected {voice_names.get(exp_voice, exp_voice)} voice, '
-            f'got {voice_names.get(act_voice, act_voice)}'
-        )
+        # Deponent verbs use middle forms but translate as active
+        verb_lemma = actual.get("verb")
+        is_deponent = WORDS.get(verb_lemma, {}).get("deponent", False)
+        if is_deponent and exp_voice == "act" and act_voice == "mid":
+            pass  # accept middle form for deponent verb
+        else:
+            voice_names = {"act": "active", "mid": "middle"}
+            mismatches.append(
+                f'Expected {voice_names.get(exp_voice, exp_voice)} voice, '
+                f'got {voice_names.get(act_voice, act_voice)}'
+            )
 
     # Check subject
     exp_subj = expected.get("subject")

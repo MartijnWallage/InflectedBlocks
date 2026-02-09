@@ -83,8 +83,12 @@ def display_flashcard(lemma: str, revealed: bool = False, in_vocabulary: bool = 
                       f"{entry.get('declension', '')}{'st' if entry.get('declension') == 1 else 'nd'} declension",
                       style="dim")
     elif pos == "verb":
-        header.append(f"  {pos}, {entry.get('conjugation', '')}",
-                      style="dim")
+        if entry.get("deponent"):
+            header.append(f"  {pos}, {entry.get('conjugation', '')}, deponent",
+                          style="dim")
+        else:
+            header.append(f"  {pos}, {entry.get('conjugation', '')}",
+                          style="dim")
     elif pos == "adjective":
         header.append(f"  {pos}", style="dim")
     else:
