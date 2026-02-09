@@ -48,76 +48,76 @@
   ],
   "flashcard_progress": {
     "ὁ": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 1,
+      "next_review": "2026-02-10"
     },
     "ἄνθρωπος": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 3,
+      "next_review": "2026-02-14"
     },
     "ἵππος": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 1,
+      "next_review": "2026-02-10"
     },
     "λόγος": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 1,
+      "next_review": "2026-02-10"
     },
     "δῶρον": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 1,
+      "next_review": "2026-02-10"
     },
     "θεός": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 1,
+      "next_review": "2026-02-10"
     },
     "στρατιώτης": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 3,
+      "next_review": "2026-02-14"
     },
     "ψυχή": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 3,
+      "next_review": "2026-02-14"
     },
     "θάλαττα": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 3,
+      "next_review": "2026-02-14"
     },
     "ἀλήθεια": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 3,
+      "next_review": "2026-02-14"
     },
     "οἰκία": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 1,
+      "next_review": "2026-02-10"
     },
     "παιδίον": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 1,
+      "next_review": "2026-02-10"
     },
     "βιβλίον": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 1,
+      "next_review": "2026-02-10"
     },
     "πόλεμος": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 1,
+      "next_review": "2026-02-10"
     },
     "εἰρήνη": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 3,
+      "next_review": "2026-02-14"
     },
     "νῆσος": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 3,
+      "next_review": "2026-02-14"
     },
     "λύω": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 1,
+      "next_review": "2026-02-10"
     },
     "γράφω": {
       "box": 1,
-      "next_review": "2026-02-09"
+      "next_review": "2026-02-10"
     },
     "παιδεύω": {
       "box": 1,
@@ -152,44 +152,44 @@
       "next_review": "2026-02-10"
     },
     "ἀγαθός": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 3,
+      "next_review": "2026-02-14"
     },
     "κακός": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 1,
+      "next_review": "2026-02-10"
     },
     "καλός": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 1,
+      "next_review": "2026-02-10"
     },
     "σοφός": {
       "box": 2,
       "next_review": "2026-02-10"
     },
     "μικρός": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 1,
+      "next_review": "2026-02-10"
     },
     "μέγας": {
-      "box": 2,
-      "next_review": "2026-02-09"
+      "box": 1,
+      "next_review": "2026-02-10"
     },
     "δίκαιος": {
-      "box": 1,
-      "next_review": "2026-02-09"
+      "box": 2,
+      "next_review": "2026-02-11"
     },
     "ἄξιος": {
       "box": 1,
-      "next_review": "2026-02-09"
+      "next_review": "2026-02-10"
     },
     "ἐν": {
       "box": 4,
       "next_review": "2026-02-22"
     },
     "εἰς": {
-      "box": 1,
-      "next_review": "2026-02-09"
+      "box": 2,
+      "next_review": "2026-02-11"
     },
     "ἐκ": {
       "box": 5,
@@ -228,5 +228,5 @@
       "next_review": "2026-02-10"
     }
   },
-  "sentences_completed": 44
+  "sentences_completed": 48
 }

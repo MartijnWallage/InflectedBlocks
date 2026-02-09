@@ -1635,4 +1635,57 @@ PROMPTS: list[dict] = [
             "object": {"noun": "ἵππος"},
         },
     },
+    # ── 1st / 2nd person prompts (pro-drop) ──────────────────────────────
+    {
+        "english": "I release the horse.",
+        "hint": "Verb (1sg pres act) + object (acc) — no subject noun needed",
+        "required_lemmas": ["ὁ", "λύω", "ἵππος"],
+        "expected": {
+            "verb": "λύω",
+            "tense": "pres",
+            "voice": "act",
+            "person": "1",
+            "number": "sg",
+            "object": {"noun": "ἵππος"},
+        },
+    },
+    {
+        "english": "You write a book.",
+        "hint": "Verb (2sg pres act) + object (acc, no article) — no subject noun needed",
+        "required_lemmas": ["γράφω", "βιβλίον"],
+        "expected": {
+            "verb": "γράφω",
+            "tense": "pres",
+            "voice": "act",
+            "person": "2",
+            "number": "sg",
+            "object": {"noun": "βιβλίον", "indef": True},
+        },
+    },
+    {
+        "english": "We send the gift.",
+        "hint": "Verb (1pl pres act) + object (acc) — no subject noun needed",
+        "required_lemmas": ["ὁ", "πέμπω", "δῶρον"],
+        "expected": {
+            "verb": "πέμπω",
+            "tense": "pres",
+            "voice": "act",
+            "person": "1",
+            "number": "pl",
+            "object": {"noun": "δῶρον"},
+        },
+    },
+    {
+        "english": "I receive the gift.",
+        "hint": "Verb (1sg pres act — deponent, use middle form) + object (acc) — no subject noun needed",
+        "required_lemmas": ["ὁ", "δέχομαι", "δῶρον"],
+        "expected": {
+            "verb": "δέχομαι",
+            "tense": "pres",
+            "voice": "act",
+            "person": "1",
+            "number": "sg",
+            "object": {"noun": "δῶρον"},
+        },
+    },
 ]

@@ -127,6 +127,8 @@ def extract_roles(tree) -> dict:
             roles["verb"] = child.features.get("lemma")
             roles["tense"] = child.features.get("tense")
             roles["voice"] = child.features.get("voice")
+            roles["person"] = child.features.get("person")
+            roles["number"] = child.features.get("number")
         elif child.symbol == "NP":
             roles["object"] = _extract_np(child)
         elif child.symbol == "PP":
@@ -192,6 +194,26 @@ def check_translation(actual: dict, expected: dict) -> tuple[bool, list[str]]:
                 f'Expected {voice_names.get(exp_voice, exp_voice)} voice, '
                 f'got {voice_names.get(act_voice, act_voice)}'
             )
+
+    # Check person
+    exp_person = expected.get("person")
+    act_person = actual.get("person")
+    if exp_person and act_person != exp_person:
+        person_names = {"1": "1st", "2": "2nd", "3": "3rd"}
+        mismatches.append(
+            f'Expected {person_names.get(exp_person, exp_person)} person, '
+            f'got {person_names.get(act_person, act_person)}'
+        )
+
+    # Check number
+    exp_number = expected.get("number")
+    act_number = actual.get("number")
+    if exp_number and act_number != exp_number:
+        number_names = {"sg": "singular", "pl": "plural"}
+        mismatches.append(
+            f'Expected {number_names.get(exp_number, exp_number)} number, '
+            f'got {number_names.get(act_number, act_number)}'
+        )
 
     # Check subject
     exp_subj = expected.get("subject")

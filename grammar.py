@@ -98,12 +98,15 @@ def _get_feat(sym_feats: list[dict], idx: int, key: str) -> str | None:
 def _make_rules():
     rules = []
 
-    # S → NP[nom] VP  (NP and VP agree in number)
+    # S → NP[nom] VP  (NP and VP agree in number; noun subjects require 3rd person)
     def s_np_vp(feats):
         if _get_feat(feats, 0, "case") != "nom":
             return None
         if not _agree(feats, [0, 1], ["number"]):
             return None
+        vp_person = _get_feat(feats, 1, "person")
+        if vp_person and vp_person != "3":
+            return None  # noun subject requires 3rd person verb
         return {}
     rules.append(("S", ["NP", "VP"], s_np_vp))
 
@@ -120,7 +123,13 @@ def _make_rules():
     # VP → V  (intransitive)
     def vp_v(feats):
         num = _get_feat(feats, 0, "number")
-        return {"number": num} if num else {}
+        person = _get_feat(feats, 0, "person")
+        result = {}
+        if num:
+            result["number"] = num
+        if person:
+            result["person"] = person
+        return result
     rules.append(("VP", ["V"], vp_v))
 
     # VP → V NP[acc]  (transitive)
@@ -128,13 +137,25 @@ def _make_rules():
         if _get_feat(feats, 1, "case") != "acc":
             return None
         num = _get_feat(feats, 0, "number")
-        return {"number": num} if num else {}
+        person = _get_feat(feats, 0, "person")
+        result = {}
+        if num:
+            result["number"] = num
+        if person:
+            result["person"] = person
+        return result
     rules.append(("VP", ["V", "NP"], vp_v_np))
 
     # VP → V PP  (verb + prepositional phrase)
     def vp_v_pp(feats):
         num = _get_feat(feats, 0, "number")
-        return {"number": num} if num else {}
+        person = _get_feat(feats, 0, "person")
+        result = {}
+        if num:
+            result["number"] = num
+        if person:
+            result["person"] = person
+        return result
     rules.append(("VP", ["V", "PP"], vp_v_pp))
 
     # VP → V NP[acc] PP  (verb + object + PP)
@@ -142,7 +163,13 @@ def _make_rules():
         if _get_feat(feats, 1, "case") != "acc":
             return None
         num = _get_feat(feats, 0, "number")
-        return {"number": num} if num else {}
+        person = _get_feat(feats, 0, "person")
+        result = {}
+        if num:
+            result["number"] = num
+        if person:
+            result["person"] = person
+        return result
     rules.append(("VP", ["V", "NP", "PP"], vp_v_np_pp))
 
     # NP → Art N  (article + noun, must agree)
@@ -440,15 +467,17 @@ class ChartParser:
                                 )
                                 return
 
-        # Subject-verb number agreement
+        # Subject-verb number and person agreement
         first_nom_noun = None
         first_verb = None
+        first_verb_feats = None
         for i in range(n):
             for s, f in token_readings[i]:
                 if s == "N" and f.get("case") == "nom" and first_nom_noun is None:
                     first_nom_noun = (f.get("number"), tokens[i])
                 if s == "V" and first_verb is None:
                     first_verb = (f.get("number"), tokens[i])
+                    first_verb_feats = f
         if first_nom_noun and first_verb:
             if (first_nom_noun[0] and first_verb[0] and
                     first_nom_noun[0] != first_verb[0]):
@@ -456,6 +485,14 @@ class ChartParser:
                     f"Number disagreement: subject '{first_nom_noun[1]}' is "
                     f"{first_nom_noun[0]} but verb '{first_verb[1]}' is "
                     f"{first_verb[0]}"
+                )
+            verb_person = first_verb_feats.get("person")
+            if verb_person and verb_person != "3":
+                person_names = {"1": "1st", "2": "2nd", "3": "3rd"}
+                errors.append(
+                    f"Person disagreement: noun subject '{first_nom_noun[1]}' is "
+                    f"3rd person but verb '{first_verb[1]}' is "
+                    f"{person_names.get(verb_person, verb_person)} person"
                 )
 
 
