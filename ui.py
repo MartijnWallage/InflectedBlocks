@@ -22,6 +22,7 @@ COLORS = {
     "Adj": "yellow",
     "Prep": "blue",
     "Conj": "white",
+    "Part": "bright_magenta",
     "NP": "green",
     "VP": "magenta",
     "PP": "blue",
@@ -147,6 +148,18 @@ def display_flashcard(lemma: str, revealed: bool = False, in_vocabulary: bool = 
                             row.append(forms.get(key, ""))
                         voice_tbl.add_row(*row)
                 verb_tables.append((voice_label, voice_tbl))
+            # Participle forms (nom.sg for masc/fem/neut)
+            ptcp_m = forms.get("pres_act_ptcp_nom_sg_masc", "")
+            ptcp_f = forms.get("pres_act_ptcp_nom_sg_fem", "")
+            ptcp_n = forms.get("pres_act_ptcp_nom_sg_neut", "")
+            if ptcp_m:
+                ptcp_tbl = Table(show_header=True, box=None, padding=(0, 1),
+                                 pad_edge=False)
+                ptcp_tbl.add_column("masc", style="bright_white")
+                ptcp_tbl.add_column("fem", style="bright_white")
+                ptcp_tbl.add_column("neut", style="bright_white")
+                ptcp_tbl.add_row(ptcp_m, ptcp_f, ptcp_n)
+                verb_tables.append(("Present Active Participle", ptcp_tbl))
             tbl = verb_tables
 
         elif pos in ("article", "adjective"):

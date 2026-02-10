@@ -312,6 +312,31 @@ WORDS: dict[str, dict] = {
             "aor_mid_ind_1pl": "ἐλυσάμεθα",
             "aor_mid_ind_2pl": "ἐλύσασθε",
             "aor_mid_ind_3pl": "ἐλύσαντο",
+            # Present active participle
+            "pres_act_ptcp_nom_sg_masc": "λύων",
+            "pres_act_ptcp_gen_sg_masc": "λύοντος",
+            "pres_act_ptcp_dat_sg_masc": "λύοντι",
+            "pres_act_ptcp_acc_sg_masc": "λύοντα",
+            "pres_act_ptcp_nom_pl_masc": "λύοντες",
+            "pres_act_ptcp_gen_pl_masc": "λυόντων",
+            "pres_act_ptcp_dat_pl_masc": "λύουσι(ν)",
+            "pres_act_ptcp_acc_pl_masc": "λύοντας",
+            "pres_act_ptcp_nom_sg_fem": "λύουσα",
+            "pres_act_ptcp_gen_sg_fem": "λυούσης",
+            "pres_act_ptcp_dat_sg_fem": "λυούσῃ",
+            "pres_act_ptcp_acc_sg_fem": "λύουσαν",
+            "pres_act_ptcp_nom_pl_fem": "λύουσαι",
+            "pres_act_ptcp_gen_pl_fem": "λυουσῶν",
+            "pres_act_ptcp_dat_pl_fem": "λυούσαις",
+            "pres_act_ptcp_acc_pl_fem": "λυούσας",
+            "pres_act_ptcp_nom_sg_neut": "λῦον",
+            "pres_act_ptcp_gen_sg_neut": "λύοντος",
+            "pres_act_ptcp_dat_sg_neut": "λύοντι",
+            "pres_act_ptcp_acc_sg_neut": "λῦον",
+            "pres_act_ptcp_nom_pl_neut": "λύοντα",
+            "pres_act_ptcp_gen_pl_neut": "λυόντων",
+            "pres_act_ptcp_dat_pl_neut": "λύουσι(ν)",
+            "pres_act_ptcp_acc_pl_neut": "λύοντα",
         },
     },
     "γράφω": {
@@ -370,6 +395,31 @@ WORDS: dict[str, dict] = {
             "aor_mid_ind_1pl": "ἐγραψάμεθα",
             "aor_mid_ind_2pl": "ἐγράψασθε",
             "aor_mid_ind_3pl": "ἐγράψαντο",
+            # Present active participle
+            "pres_act_ptcp_nom_sg_masc": "γράφων",
+            "pres_act_ptcp_gen_sg_masc": "γράφοντος",
+            "pres_act_ptcp_dat_sg_masc": "γράφοντι",
+            "pres_act_ptcp_acc_sg_masc": "γράφοντα",
+            "pres_act_ptcp_nom_pl_masc": "γράφοντες",
+            "pres_act_ptcp_gen_pl_masc": "γραφόντων",
+            "pres_act_ptcp_dat_pl_masc": "γράφουσι(ν)",
+            "pres_act_ptcp_acc_pl_masc": "γράφοντας",
+            "pres_act_ptcp_nom_sg_fem": "γράφουσα",
+            "pres_act_ptcp_gen_sg_fem": "γραφούσης",
+            "pres_act_ptcp_dat_sg_fem": "γραφούσῃ",
+            "pres_act_ptcp_acc_sg_fem": "γράφουσαν",
+            "pres_act_ptcp_nom_pl_fem": "γράφουσαι",
+            "pres_act_ptcp_gen_pl_fem": "γραφουσῶν",
+            "pres_act_ptcp_dat_pl_fem": "γραφούσαις",
+            "pres_act_ptcp_acc_pl_fem": "γραφούσας",
+            "pres_act_ptcp_nom_sg_neut": "γράφον",
+            "pres_act_ptcp_gen_sg_neut": "γράφοντος",
+            "pres_act_ptcp_dat_sg_neut": "γράφοντι",
+            "pres_act_ptcp_acc_sg_neut": "γράφον",
+            "pres_act_ptcp_nom_pl_neut": "γράφοντα",
+            "pres_act_ptcp_gen_pl_neut": "γραφόντων",
+            "pres_act_ptcp_dat_pl_neut": "γράφουσι(ν)",
+            "pres_act_ptcp_acc_pl_neut": "γράφοντα",
         },
     },
     "παιδεύω": {
@@ -486,6 +536,31 @@ WORDS: dict[str, dict] = {
             "aor_mid_ind_1pl": "ἐπεμψάμεθα",
             "aor_mid_ind_2pl": "ἐπέμψασθε",
             "aor_mid_ind_3pl": "ἐπέμψαντο",
+            # Present active participle
+            "pres_act_ptcp_nom_sg_masc": "πέμπων",
+            "pres_act_ptcp_gen_sg_masc": "πέμποντος",
+            "pres_act_ptcp_dat_sg_masc": "πέμποντι",
+            "pres_act_ptcp_acc_sg_masc": "πέμποντα",
+            "pres_act_ptcp_nom_pl_masc": "πέμποντες",
+            "pres_act_ptcp_gen_pl_masc": "πεμπόντων",
+            "pres_act_ptcp_dat_pl_masc": "πέμπουσι(ν)",
+            "pres_act_ptcp_acc_pl_masc": "πέμποντας",
+            "pres_act_ptcp_nom_sg_fem": "πέμπουσα",
+            "pres_act_ptcp_gen_sg_fem": "πεμπούσης",
+            "pres_act_ptcp_dat_sg_fem": "πεμπούσῃ",
+            "pres_act_ptcp_acc_sg_fem": "πέμπουσαν",
+            "pres_act_ptcp_nom_pl_fem": "πέμπουσαι",
+            "pres_act_ptcp_gen_pl_fem": "πεμπουσῶν",
+            "pres_act_ptcp_dat_pl_fem": "πεμπούσαις",
+            "pres_act_ptcp_acc_pl_fem": "πεμπούσας",
+            "pres_act_ptcp_nom_sg_neut": "πέμπον",
+            "pres_act_ptcp_gen_sg_neut": "πέμποντος",
+            "pres_act_ptcp_dat_sg_neut": "πέμποντι",
+            "pres_act_ptcp_acc_sg_neut": "πέμπον",
+            "pres_act_ptcp_nom_pl_neut": "πέμποντα",
+            "pres_act_ptcp_gen_pl_neut": "πεμπόντων",
+            "pres_act_ptcp_dat_pl_neut": "πέμπουσι(ν)",
+            "pres_act_ptcp_acc_pl_neut": "πέμποντα",
         },
     },
     "φέρω": {
@@ -1218,6 +1293,12 @@ def _parse_article_or_adj_key(key: str) -> dict:
 def _parse_verb_key(key: str) -> dict:
     """Parse a verb form key like 'pres_act_ind_3sg' into feature dict."""
     parts = key.split("_")
+    if len(parts) == 6 and parts[2] == "ptcp":
+        tense, voice, _, case, number, gender = parts
+        return {
+            "tense": tense, "voice": voice, "mood": "ptcp",
+            "case": case, "number": number, "gender": gender,
+        }
     if len(parts) == 4:
         tense, voice, mood, pn = parts
         person = pn[0]
@@ -1235,8 +1316,9 @@ def _build_form_index() -> dict[str, list[tuple[str, str, dict]]]:
     """Build a reverse index from surface form → (lemma, pos, features)."""
     index: dict[str, list[tuple[str, str, dict]]] = {}
     for lemma, entry in WORDS.items():
-        pos = entry["pos"]
+        entry_pos = entry["pos"]
         for key, form in entry["forms"].items():
+            pos = entry_pos
             # Handle ν-movable forms like "λύουσι(ν)"
             forms_to_add = [form]
             if "(ν)" in form:
@@ -1249,6 +1331,8 @@ def _build_form_index() -> dict[str, list[tuple[str, str, dict]]]:
                 features = _parse_article_or_adj_key(key)
             elif pos == "verb":
                 features = _parse_verb_key(key)
+                if features.get("mood") == "ptcp":
+                    pos = "participle"
             elif pos == "preposition":
                 features = {"governs": entry.get("governs", "")}
             elif pos == "conjunction":
@@ -1686,6 +1770,37 @@ PROMPTS: list[dict] = [
             "person": "1",
             "number": "sg",
             "object": {"noun": "δῶρον"},
+        },
+    },
+    # ── Participle prompts ──────────────────────────────────────────────
+    {
+        "english": "The releasing man sees the horse.",
+        "hint": "Article + participle (nom masc sg) + noun (nom) + verb (3sg pres act) + article + noun (acc)",
+        "required_lemmas": ["ὁ", "λύω", "ἄνθρωπος", "βλέπω", "ἵππος"],
+        "expected": {
+            "subject": {
+                "noun": "ἄνθρωπος",
+                "participle": {"lemma": "λύω", "tense": "pres", "voice": "act"},
+            },
+            "verb": "βλέπω",
+            "tense": "pres",
+            "voice": "act",
+            "object": {"noun": "ἵππος"},
+        },
+    },
+    {
+        "english": "The writing soldier sends a gift.",
+        "hint": "Article + participle (nom masc sg) + noun (nom) + verb (3sg pres act) + noun (acc, no article)",
+        "required_lemmas": ["ὁ", "γράφω", "στρατιώτης", "πέμπω", "δῶρον"],
+        "expected": {
+            "subject": {
+                "noun": "στρατιώτης",
+                "participle": {"lemma": "γράφω", "tense": "pres", "voice": "act"},
+            },
+            "verb": "πέμπω",
+            "tense": "pres",
+            "voice": "act",
+            "object": {"noun": "δῶρον", "indef": True},
         },
     },
 ]

@@ -40,9 +40,10 @@ POS_TO_SYMBOL = {
     "adjective": "Adj",
     "preposition": "Prep",
     "conjunction": "Conj",
+    "participle": "Part",
 }
 
-TERMINALS = {"Art", "N", "V", "Adj", "Prep", "Conj"}
+TERMINALS = {"Art", "N", "V", "Adj", "Prep", "Conj", "Part"}
 
 
 # ---------------------------------------------------------------------------
@@ -204,6 +205,28 @@ def _make_rules():
             "gender": _get_feat(feats, 0, "gender") or _get_feat(feats, 1, "gender"),
         }
     rules.append(("NP", ["Art", "N", "Adj"], np_art_n_adj))
+
+    # NP → Art Part N  (article + participle + noun, all agree)
+    def np_art_part_n(feats):
+        if not _agree(feats, [0, 1, 2], ["case", "number", "gender"]):
+            return None
+        return {
+            "case": _get_feat(feats, 0, "case") or _get_feat(feats, 2, "case"),
+            "number": _get_feat(feats, 0, "number") or _get_feat(feats, 2, "number"),
+            "gender": _get_feat(feats, 0, "gender") or _get_feat(feats, 2, "gender"),
+        }
+    rules.append(("NP", ["Art", "Part", "N"], np_art_part_n))
+
+    # NP → Art N Part  (article + noun + participle, all agree)
+    def np_art_n_part(feats):
+        if not _agree(feats, [0, 1, 2], ["case", "number", "gender"]):
+            return None
+        return {
+            "case": _get_feat(feats, 0, "case") or _get_feat(feats, 1, "case"),
+            "number": _get_feat(feats, 0, "number") or _get_feat(feats, 1, "number"),
+            "gender": _get_feat(feats, 0, "gender") or _get_feat(feats, 1, "gender"),
+        }
+    rules.append(("NP", ["Art", "N", "Part"], np_art_n_part))
 
     # NP → N  (bare noun)
     def np_n(feats):

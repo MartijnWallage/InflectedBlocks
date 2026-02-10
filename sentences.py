@@ -74,6 +74,12 @@ def _extract_np(node) -> dict:
             result["noun"] = child.features.get("lemma")
         elif child.symbol == "Adj":
             result["adj"] = child.features.get("lemma")
+        elif child.symbol == "Part":
+            result["participle"] = {
+                "lemma": child.features.get("lemma"),
+                "tense": child.features.get("tense"),
+                "voice": child.features.get("voice"),
+            }
     # Bare noun (NP → N)
     if node.is_leaf() and node.symbol == "N":
         result["noun"] = node.features.get("lemma")
@@ -282,6 +288,28 @@ def _check_np_role(role: str, expected_np: dict, actual_np: dict,
     elif not exp_adj and act_adj:
         mismatches.append(
             f'In {role}: unexpected adjective "{_meaning(act_adj)}" ({act_adj})'
+        )
+
+    # Check participle
+    exp_part = expected_np.get("participle")
+    act_part = actual_np.get("participle")
+    if exp_part:
+        if not act_part:
+            mismatches.append(
+                f'In {role}: expected participle of "{_meaning(exp_part["lemma"])}" '
+                f'({exp_part["lemma"]}), but none found'
+            )
+        else:
+            if act_part.get("lemma") != exp_part.get("lemma"):
+                mismatches.append(
+                    f'In {role}: expected participle of "{_meaning(exp_part["lemma"])}" '
+                    f'({exp_part["lemma"]}), got "{_meaning(act_part.get("lemma"))}" '
+                    f'({act_part.get("lemma")})'
+                )
+    elif act_part:
+        mismatches.append(
+            f'In {role}: unexpected participle "{_meaning(act_part.get("lemma"))}" '
+            f'({act_part.get("lemma")})'
         )
 
     # Check article: indefinite NPs must not have one, definite NPs must

@@ -56,8 +56,8 @@
       "next_review": "2026-02-14"
     },
     "ἵππος": {
-      "box": 1,
-      "next_review": "2026-02-10"
+      "box": 2,
+      "next_review": "2026-02-12"
     },
     "λόγος": {
       "box": 1,
@@ -112,24 +112,24 @@
       "next_review": "2026-02-14"
     },
     "λύω": {
-      "box": 1,
-      "next_review": "2026-02-10"
+      "box": 5,
+      "next_review": "2026-03-12"
     },
     "γράφω": {
-      "box": 1,
-      "next_review": "2026-02-10"
+      "box": 2,
+      "next_review": "2026-02-12"
     },
     "παιδεύω": {
       "box": 1,
       "next_review": "2026-02-10"
     },
     "πέμπω": {
-      "box": 3,
-      "next_review": "2026-02-13"
+      "box": 4,
+      "next_review": "2026-02-24"
     },
     "φέρω": {
-      "box": 1,
-      "next_review": "2026-02-10"
+      "box": 2,
+      "next_review": "2026-02-12"
     },
     "ἄγω": {
       "box": 1,
@@ -140,8 +140,8 @@
       "next_review": "2026-02-10"
     },
     "ἔχω": {
-      "box": 1,
-      "next_review": "2026-02-10"
+      "box": 2,
+      "next_review": "2026-02-12"
     },
     "βλέπω": {
       "box": 4,
@@ -220,13 +220,13 @@
       "next_review": "2026-02-10"
     },
     "βούλομαι": {
-      "box": 1,
-      "next_review": "2026-02-10"
+      "box": 2,
+      "next_review": "2026-02-12"
     },
     "δέχομαι": {
       "box": 1,
       "next_review": "2026-02-10"
     }
   },
-  "sentences_completed": 48
+  "sentences_completed": 49
 }
