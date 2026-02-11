@@ -104,31 +104,19 @@ def extract_roles(tree) -> dict:
     """Walk the parse tree and extract grammatical roles.
 
     Returns a dict with keys like "subject", "verb", "object", "pp".
+    Roles are identified by case inflection, not by word order.
     For compound sentences (S Conj S), returns {"compound": True}.
     """
     if tree.symbol != "S":
         return {}
 
-    children_syms = [c.symbol for c in tree.children]
-
     # S → S Conj S
-    if children_syms == ["S", "Conj", "S"]:
+    if any(c.symbol == "Conj" for c in tree.children):
         return {"compound": True}
 
     roles: dict = {}
 
-    # S → NP VP
-    if children_syms == ["NP", "VP"]:
-        roles["subject"] = _extract_np(tree.children[0])
-        vp = tree.children[1]
-    # S → VP (pro-drop)
-    elif children_syms == ["VP"]:
-        vp = tree.children[0]
-    else:
-        return {}
-
-    # Extract from VP
-    for child in vp.children:
+    for child in tree.children:
         if child.symbol == "V":
             roles["verb"] = child.features.get("lemma")
             roles["tense"] = child.features.get("tense")
@@ -136,7 +124,11 @@ def extract_roles(tree) -> dict:
             roles["person"] = child.features.get("person")
             roles["number"] = child.features.get("number")
         elif child.symbol == "NP":
-            roles["object"] = _extract_np(child)
+            np_case = child.features.get("case")
+            if np_case == "nom":
+                roles["subject"] = _extract_np(child)
+            elif np_case == "acc":
+                roles["object"] = _extract_np(child)
         elif child.symbol == "PP":
             roles["pp"] = _extract_pp(child)
 

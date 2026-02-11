@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from itertools import permutations as _permutations
 from typing import Any
 
 from data import lookup_form, WORDS
@@ -95,83 +96,79 @@ def _get_feat(sym_feats: list[dict], idx: int, key: str) -> str | None:
     return None
 
 
+# ---------------------------------------------------------------------------
+# Flat sentence rules — Greek has free word order at the clause level.
+# Grammatical roles (subject, object) are determined by case inflections,
+# not by position.  We generate S rules for every permutation of the
+# clause-level constituents (NP-nom, V, NP-acc, PP).
+# ---------------------------------------------------------------------------
+
+def _make_flat_s_constraint(roles: list[str]):
+    """Return a constraint function for a flat S rule.
+
+    *roles* maps each RHS position to its grammatical role:
+    "subj" (NP-nom), "verb" (V), "obj" (NP-acc), "pp" (PP).
+    """
+    v_idx = roles.index("verb")
+    subj_idx = roles.index("subj") if "subj" in roles else None
+
+    def constraint(feats):
+        for idx, role in enumerate(roles):
+            if role == "subj" and _get_feat(feats, idx, "case") != "nom":
+                return None
+            if role == "obj" and _get_feat(feats, idx, "case") != "acc":
+                return None
+
+        if subj_idx is not None:
+            if not _agree(feats, [subj_idx, v_idx], ["number"]):
+                return None
+            vp_person = _get_feat(feats, v_idx, "person")
+            if vp_person and vp_person != "3":
+                return None
+
+        result = {}
+        num = _get_feat(feats, v_idx, "number")
+        person = _get_feat(feats, v_idx, "person")
+        if num:
+            result["number"] = num
+        if person:
+            result["person"] = person
+        return result
+
+    return constraint
+
+
+def _add_sentence_rules(rules: list):
+    """Add flat S → … rules for every word-order permutation."""
+    patterns = [
+        # pro-drop
+        [("V", "verb")],
+        [("V", "verb"), ("NP", "obj")],
+        [("V", "verb"), ("PP", "pp")],
+        [("V", "verb"), ("NP", "obj"), ("PP", "pp")],
+        # with overt subject
+        [("NP", "subj"), ("V", "verb")],
+        [("NP", "subj"), ("V", "verb"), ("NP", "obj")],
+        [("NP", "subj"), ("V", "verb"), ("PP", "pp")],
+        [("NP", "subj"), ("V", "verb"), ("NP", "obj"), ("PP", "pp")],
+    ]
+    for pattern in patterns:
+        seen: set[tuple] = set()
+        for perm in _permutations(range(len(pattern))):
+            rhs = [pattern[i][0] for i in perm]
+            perm_roles = [pattern[i][1] for i in perm]
+            key = (tuple(rhs), tuple(perm_roles))
+            if key in seen:
+                continue
+            seen.add(key)
+            rules.append(("S", rhs, _make_flat_s_constraint(perm_roles)))
+
+
 # Rule definitions as (lhs, rhs, constraint_function)
 def _make_rules():
     rules = []
 
-    # S → NP[nom] VP  (NP and VP agree in number; noun subjects require 3rd person)
-    def s_np_vp(feats):
-        if _get_feat(feats, 0, "case") != "nom":
-            return None
-        if not _agree(feats, [0, 1], ["number"]):
-            return None
-        vp_person = _get_feat(feats, 1, "person")
-        if vp_person and vp_person != "3":
-            return None  # noun subject requires 3rd person verb
-        return {}
-    rules.append(("S", ["NP", "VP"], s_np_vp))
-
-    # S → VP  (pro-drop)
-    def s_vp(feats):
-        return {}
-    rules.append(("S", ["VP"], s_vp))
-
-    # S → S Conj S
-    def s_conj_s(feats):
-        return {}
-    rules.append(("S", ["S", "Conj", "S"], s_conj_s))
-
-    # VP → V  (intransitive)
-    def vp_v(feats):
-        num = _get_feat(feats, 0, "number")
-        person = _get_feat(feats, 0, "person")
-        result = {}
-        if num:
-            result["number"] = num
-        if person:
-            result["person"] = person
-        return result
-    rules.append(("VP", ["V"], vp_v))
-
-    # VP → V NP[acc]  (transitive)
-    def vp_v_np(feats):
-        if _get_feat(feats, 1, "case") != "acc":
-            return None
-        num = _get_feat(feats, 0, "number")
-        person = _get_feat(feats, 0, "person")
-        result = {}
-        if num:
-            result["number"] = num
-        if person:
-            result["person"] = person
-        return result
-    rules.append(("VP", ["V", "NP"], vp_v_np))
-
-    # VP → V PP  (verb + prepositional phrase)
-    def vp_v_pp(feats):
-        num = _get_feat(feats, 0, "number")
-        person = _get_feat(feats, 0, "person")
-        result = {}
-        if num:
-            result["number"] = num
-        if person:
-            result["person"] = person
-        return result
-    rules.append(("VP", ["V", "PP"], vp_v_pp))
-
-    # VP → V NP[acc] PP  (verb + object + PP)
-    def vp_v_np_pp(feats):
-        if _get_feat(feats, 1, "case") != "acc":
-            return None
-        num = _get_feat(feats, 0, "number")
-        person = _get_feat(feats, 0, "person")
-        result = {}
-        if num:
-            result["number"] = num
-        if person:
-            result["person"] = person
-        return result
-    rules.append(("VP", ["V", "NP", "PP"], vp_v_np_pp))
+    # -- NP rules (word order within NP is fixed in Greek) ---------------
 
     # NP → Art N  (article + noun, must agree)
     def np_art_n(feats):
@@ -237,6 +234,8 @@ def _make_rules():
         }
     rules.append(("NP", ["N"], np_n))
 
+    # -- PP rule (preposition precedes NP in Greek) ----------------------
+
     # PP → Prep NP  (preposition governs NP case)
     def pp_prep_np(feats):
         gov = _get_feat(feats, 0, "governs")
@@ -245,6 +244,15 @@ def _make_rules():
             return None
         return {}
     rules.append(("PP", ["Prep", "NP"], pp_prep_np))
+
+    # -- Flat sentence rules (all word-order permutations) ---------------
+
+    _add_sentence_rules(rules)
+
+    # S → S Conj S
+    def s_conj_s(feats):
+        return {}
+    rules.append(("S", ["S", "Conj", "S"], s_conj_s))
 
     return rules
 
@@ -347,56 +355,27 @@ class ChartParser:
         # Check for agreement errors between adjacent tokens
         self._check_agreement_errors(tokens, token_readings, errors)
 
-        # Check what partial spans we found
-        # Find the longest span starting from 0 that has an NP or VP
-        longest_np = 0
-        longest_vp = 0
-        for end in range(1, n + 1):
-            for sym, _, _ in chart[0][end]:
-                if sym == "NP":
-                    longest_np = max(longest_np, end)
-                if sym == "VP":
-                    longest_vp = max(longest_vp, end)
-
-        if longest_np > 0 and longest_np == n:
-            errors.append("Found a noun phrase but no verb. Add a verb to complete the sentence.")
-        elif longest_np > 0 and longest_np < n:
-            # We have a subject NP, check what follows
-            remaining_start = longest_np
-            has_full_vp = False
-            for sym, _, _ in chart[remaining_start][n]:
-                if sym == "VP":
-                    has_full_vp = True
-            if not has_full_vp:
-                # Check if there's a verb at all
-                verb_positions = [i for i in range(n) if any(s == "V" for s, _, _ in chart[i][i + 1])]
-                if verb_positions:
-                    vp = verb_positions[0]
-                    if vp + 1 < n:
-                        # Check if the remaining words after the verb form an NP
-                        # that has wrong case
-                        for end2 in range(vp + 2, n + 1):
-                            for sym, feats, _ in chart[vp + 1][end2]:
-                                if sym == "NP" and feats.get("case") != "acc":
-                                    errors.append(
-                                        f"Object NP after verb '{tokens[vp]}' "
-                                        f"is in {feats.get('case', 'unknown')} case "
-                                        f"but should be accusative"
-                                    )
-                        if not errors:
-                            errors.append(
-                                f"Verb found at position {vp + 1} but the rest of the "
-                                f"sentence doesn't form a valid verb phrase. "
-                                f"Check the case of the object noun."
-                            )
-                    else:
-                        # Verb is at end but NP + V doesn't form S
-                        # Probably number disagreement
-                        errors.append(
-                            "Subject and verb phrase don't agree. Check number agreement."
-                        )
-                else:
-                    errors.append("No verb found in the sentence.")
+        # Check if there is a verb anywhere
+        has_verb = any(
+            s == "V"
+            for i in range(n)
+            for s, _, _ in chart[i][i + 1]
+        )
+        if not has_verb:
+            has_np = any(
+                s == "NP"
+                for i in range(n)
+                for j in range(i + 1, n + 1)
+                for s, _, _ in chart[i][j]
+            )
+            if has_np:
+                errors.append(
+                    "Found a noun phrase but no verb. "
+                    "Add a verb to complete the sentence."
+                )
+            elif not errors:
+                errors.append("No verb found in the sentence.")
+            return errors
 
         # Check for preposition case errors
         for i in range(n):
@@ -412,7 +391,6 @@ class ChartParser:
                                 found_np = True
                                 np_case = feats.get("case")
                                 if np_case and np_case != gov:
-                                    prep_lemma = prep_readings[0].get("lemma", tokens[i])
                                     errors.append(
                                         f"Preposition '{tokens[i]}' governs {gov} case "
                                         f"but the NP is {np_case}"
@@ -423,7 +401,10 @@ class ChartParser:
                         )
 
         if not errors:
-            errors.append("Sentence structure not recognized. Check word order and agreement.")
+            errors.append(
+                "Sentence structure not recognized. "
+                "Check case forms and agreement."
+            )
         return errors
 
     def _check_agreement_errors(self, tokens, token_readings, errors):
