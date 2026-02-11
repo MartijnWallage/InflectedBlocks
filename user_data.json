@@ -136,8 +136,8 @@
       "next_review": "2026-02-10"
     },
     "λέγω": {
-      "box": 1,
-      "next_review": "2026-02-10"
+      "box": 2,
+      "next_review": "2026-02-13"
     },
     "ἔχω": {
       "box": 2,
@@ -228,5 +228,5 @@
       "next_review": "2026-02-10"
     }
   },
-  "sentences_completed": 58
+  "sentences_completed": 64
 }

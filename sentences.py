@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from data import PROMPTS, WORDS, lookup_form
+from data import PROMPTS, WORDS, lookup_form, translate_english
 from grammar import check_sentence, POS_TO_SYMBOL
 from accentuation import check_accentuation
 from ui import (
@@ -12,12 +12,59 @@ from ui import (
 )
 
 
+def _collect_english_words(roles: dict) -> list[str]:
+    """Extract all English keywords from a roles dict."""
+    words: list[str] = []
+    if "verb" in roles:
+        words.append(roles["verb"])
+    for key in ("subject", "object"):
+        np = roles.get(key)
+        if isinstance(np, dict):
+            if "noun" in np:
+                words.append(np["noun"])
+            if "adj" in np:
+                words.append(np["adj"])
+            part = np.get("participle")
+            if isinstance(part, dict) and "verb" in part:
+                words.append(part["verb"])
+    pp = roles.get("pp")
+    if isinstance(pp, dict):
+        if "prep" in pp:
+            words.append(pp["prep"])
+        if "noun" in pp:
+            words.append(pp["noun"])
+    return words
+
+
+def _needs_article(roles: dict) -> bool:
+    """Check if any NP in roles is definite (requires the article ὁ)."""
+    for key in ("subject", "object"):
+        np = roles.get(key)
+        if isinstance(np, dict) and not np.get("indef"):
+            return True
+    pp = roles.get("pp")
+    if isinstance(pp, dict) and "noun" in pp:
+        return True
+    return False
+
+
 def get_available_prompts(user_vocab: list[str]) -> list[dict]:
     """Return prompts for which the user knows all required lemmas."""
     vocab_set = set(user_vocab)
     available = []
     for prompt in PROMPTS:
-        if all(lemma in vocab_set for lemma in prompt["required_lemmas"]):
+        roles = prompt.get("roles")
+        if not roles:
+            continue
+        ok = True
+        for eng in _collect_english_words(roles):
+            greek_lemmas = translate_english(eng)
+            if not greek_lemmas or not any(g in vocab_set for g in greek_lemmas):
+                ok = False
+                break
+        if ok and _needs_article(roles) and "ὁ" not in vocab_set:
+            ok = False
+        if ok:
             available.append(prompt)
     return available
 
@@ -157,11 +204,11 @@ def check_translation(actual: dict, expected: dict) -> tuple[bool, list[str]]:
     # Check verb
     exp_verb = expected.get("verb")
     act_verb = actual.get("verb")
-    if exp_verb and act_verb != exp_verb:
+    if exp_verb and act_verb not in translate_english(exp_verb):
         mismatches.append(
-            f'Expected verb "{_meaning(exp_verb)}" ({exp_verb}), '
+            f'Expected verb "{exp_verb}", '
             f'got "{_meaning(act_verb)}" ({act_verb})' if act_verb
-            else f'Expected verb "{_meaning(exp_verb)}" ({exp_verb}), but none found'
+            else f'Expected verb "{exp_verb}", but none found'
         )
 
     # Check tense
@@ -242,15 +289,19 @@ def check_translation(actual: dict, expected: dict) -> tuple[bool, list[str]]:
         if not act_pp:
             mismatches.append("Expected a prepositional phrase, but none found")
         else:
-            if exp_pp.get("prep") and act_pp.get("prep") != exp_pp["prep"]:
+            exp_prep = exp_pp.get("prep")
+            act_prep = act_pp.get("prep")
+            if exp_prep and act_prep not in translate_english(exp_prep):
                 mismatches.append(
-                    f'Expected preposition "{_meaning(exp_pp["prep"])}" ({exp_pp["prep"]}), '
-                    f'got "{_meaning(act_pp.get("prep"))}" ({act_pp.get("prep")})'
+                    f'Expected preposition "{exp_prep}", '
+                    f'got "{_meaning(act_prep)}" ({act_prep})'
                 )
-            if exp_pp.get("noun") and act_pp.get("noun") != exp_pp["noun"]:
+            exp_pp_noun = exp_pp.get("noun")
+            act_pp_noun = act_pp.get("noun")
+            if exp_pp_noun and act_pp_noun not in translate_english(exp_pp_noun):
                 mismatches.append(
-                    f'In PP: expected noun "{_meaning(exp_pp["noun"])}" ({exp_pp["noun"]}), '
-                    f'got "{_meaning(act_pp.get("noun"))}" ({act_pp.get("noun")})'
+                    f'In PP: expected noun "{exp_pp_noun}", '
+                    f'got "{_meaning(act_pp_noun)}" ({act_pp_noun})'
                 )
     elif act_pp:
         mismatches.append("Unexpected prepositional phrase — the prompt doesn't have one")
@@ -263,19 +314,19 @@ def _check_np_role(role: str, expected_np: dict, actual_np: dict,
     """Compare an expected NP (noun + optional adj) against actual."""
     exp_noun = expected_np.get("noun")
     act_noun = actual_np.get("noun")
-    if exp_noun and act_noun != exp_noun:
+    if exp_noun and act_noun not in translate_english(exp_noun):
         mismatches.append(
-            f'In {role}: expected "{_meaning(exp_noun)}" ({exp_noun}), '
+            f'In {role}: expected "{exp_noun}", '
             f'got "{_meaning(act_noun)}" ({act_noun})'
         )
 
     exp_adj = expected_np.get("adj")
     act_adj = actual_np.get("adj")
-    if exp_adj and act_adj != exp_adj:
+    if exp_adj and act_adj not in translate_english(exp_adj):
         mismatches.append(
-            f'In {role}: expected adjective "{_meaning(exp_adj)}" ({exp_adj}), '
+            f'In {role}: expected adjective "{exp_adj}", '
             f'got "{_meaning(act_adj)}" ({act_adj})' if act_adj
-            else f'In {role}: expected adjective "{_meaning(exp_adj)}" ({exp_adj}), but none found'
+            else f'In {role}: expected adjective "{exp_adj}", but none found'
         )
     elif not exp_adj and act_adj:
         mismatches.append(
@@ -286,16 +337,17 @@ def _check_np_role(role: str, expected_np: dict, actual_np: dict,
     exp_part = expected_np.get("participle")
     act_part = actual_np.get("participle")
     if exp_part:
+        exp_part_verb = exp_part.get("verb")
         if not act_part:
             mismatches.append(
-                f'In {role}: expected participle of "{_meaning(exp_part["lemma"])}" '
-                f'({exp_part["lemma"]}), but none found'
+                f'In {role}: expected participle of "{exp_part_verb}", '
+                f'but none found'
             )
         else:
-            if act_part.get("lemma") != exp_part.get("lemma"):
+            if act_part.get("lemma") not in translate_english(exp_part_verb):
                 mismatches.append(
-                    f'In {role}: expected participle of "{_meaning(exp_part["lemma"])}" '
-                    f'({exp_part["lemma"]}), got "{_meaning(act_part.get("lemma"))}" '
+                    f'In {role}: expected participle of "{exp_part_verb}", '
+                    f'got "{_meaning(act_part.get("lemma"))}" '
                     f'({act_part.get("lemma")})'
                 )
     elif act_part:
@@ -346,7 +398,7 @@ def sentence_construction_loop(prompt: dict, user_vocab: list[str]) -> bool:
 
             if success and tree:
                 display_parse_tree(tree)
-                expected = prompt.get("expected")
+                expected = prompt.get("roles")
                 if expected:
                     actual_roles = extract_roles(tree)
                     match, msgs = check_translation(actual_roles, expected)

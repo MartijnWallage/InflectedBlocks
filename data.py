@@ -12,6 +12,7 @@ WORDS: dict[str, dict] = {
         "lemma": "ὁ",
         "pos": "article",
         "meaning": "the",
+        "translations": ["the"],
         "forms": {
             # masculine
             "nom_sg_masc": "ὁ",
@@ -48,6 +49,7 @@ WORDS: dict[str, dict] = {
         "lemma": "ἄνθρωπος",
         "pos": "noun",
         "meaning": "man, human being",
+        "translations": ["man", "human"],
         "gender": "masculine",
         "declension": 2,
         "forms": {
@@ -62,6 +64,7 @@ WORDS: dict[str, dict] = {
         "lemma": "ἵππος",
         "pos": "noun",
         "meaning": "horse",
+        "translations": ["horse"],
         "gender": "masculine",
         "declension": 2,
         "forms": {
@@ -76,6 +79,7 @@ WORDS: dict[str, dict] = {
         "lemma": "λόγος",
         "pos": "noun",
         "meaning": "word, speech, reason",
+        "translations": ["word", "speech", "reason"],
         "gender": "masculine",
         "declension": 2,
         "forms": {
@@ -90,6 +94,7 @@ WORDS: dict[str, dict] = {
         "lemma": "δῶρον",
         "pos": "noun",
         "meaning": "gift",
+        "translations": ["gift"],
         "gender": "neuter",
         "declension": 2,
         "forms": {
@@ -104,6 +109,7 @@ WORDS: dict[str, dict] = {
         "lemma": "θεός",
         "pos": "noun",
         "meaning": "god",
+        "translations": ["god"],
         "gender": "masculine",
         "declension": 2,
         "forms": {
@@ -118,6 +124,7 @@ WORDS: dict[str, dict] = {
         "lemma": "στρατιώτης",
         "pos": "noun",
         "meaning": "soldier",
+        "translations": ["soldier"],
         "gender": "masculine",
         "declension": 1,
         "forms": {
@@ -132,6 +139,7 @@ WORDS: dict[str, dict] = {
         "lemma": "ψυχή",
         "pos": "noun",
         "meaning": "soul, spirit",
+        "translations": ["soul", "spirit"],
         "gender": "feminine",
         "declension": 1,
         "forms": {
@@ -146,6 +154,7 @@ WORDS: dict[str, dict] = {
         "lemma": "θάλαττα",
         "pos": "noun",
         "meaning": "sea",
+        "translations": ["sea"],
         "gender": "feminine",
         "declension": 1,
         "forms": {
@@ -160,6 +169,7 @@ WORDS: dict[str, dict] = {
         "lemma": "ἀλήθεια",
         "pos": "noun",
         "meaning": "truth",
+        "translations": ["truth"],
         "gender": "feminine",
         "declension": 1,
         "forms": {
@@ -174,6 +184,7 @@ WORDS: dict[str, dict] = {
         "lemma": "οἰκία",
         "pos": "noun",
         "meaning": "house",
+        "translations": ["house"],
         "gender": "feminine",
         "declension": 1,
         "forms": {
@@ -188,6 +199,7 @@ WORDS: dict[str, dict] = {
         "lemma": "παιδίον",
         "pos": "noun",
         "meaning": "child",
+        "translations": ["child"],
         "gender": "neuter",
         "declension": 2,
         "forms": {
@@ -202,6 +214,7 @@ WORDS: dict[str, dict] = {
         "lemma": "βιβλίον",
         "pos": "noun",
         "meaning": "book",
+        "translations": ["book"],
         "gender": "neuter",
         "declension": 2,
         "forms": {
@@ -216,6 +229,7 @@ WORDS: dict[str, dict] = {
         "lemma": "πόλεμος",
         "pos": "noun",
         "meaning": "war",
+        "translations": ["war"],
         "gender": "masculine",
         "declension": 2,
         "forms": {
@@ -230,6 +244,7 @@ WORDS: dict[str, dict] = {
         "lemma": "εἰρήνη",
         "pos": "noun",
         "meaning": "peace",
+        "translations": ["peace"],
         "gender": "feminine",
         "declension": 1,
         "forms": {
@@ -244,6 +259,7 @@ WORDS: dict[str, dict] = {
         "lemma": "νῆσος",
         "pos": "noun",
         "meaning": "island",
+        "translations": ["island"],
         "gender": "feminine",
         "declension": 2,
         "forms": {
@@ -260,6 +276,7 @@ WORDS: dict[str, dict] = {
         "lemma": "λύω",
         "pos": "verb",
         "meaning": "I loosen, release",
+        "translations": ["loosen", "release", "ransom"],
         "conjugation": "thematic",
         "forms": {
             "pres_act_ind_1sg": "λύω",
@@ -343,6 +360,7 @@ WORDS: dict[str, dict] = {
         "lemma": "γράφω",
         "pos": "verb",
         "meaning": "I write",
+        "translations": ["write"],
         "conjugation": "thematic",
         "forms": {
             "pres_act_ind_1sg": "γράφω",
@@ -426,6 +444,7 @@ WORDS: dict[str, dict] = {
         "lemma": "παιδεύω",
         "pos": "verb",
         "meaning": "I teach, educate",
+        "translations": ["teach", "educate"],
         "conjugation": "thematic",
         "forms": {
             "pres_act_ind_1sg": "παιδεύω",
@@ -484,6 +503,7 @@ WORDS: dict[str, dict] = {
         "lemma": "πέμπω",
         "pos": "verb",
         "meaning": "I send",
+        "translations": ["send"],
         "conjugation": "thematic",
         "forms": {
             "pres_act_ind_1sg": "πέμπω",
@@ -567,6 +587,7 @@ WORDS: dict[str, dict] = {
         "lemma": "φέρω",
         "pos": "verb",
         "meaning": "I carry, bear",
+        "translations": ["carry", "bear"],
         "conjugation": "thematic",
         "forms": {
             "pres_act_ind_1sg": "φέρω",
@@ -625,6 +646,7 @@ WORDS: dict[str, dict] = {
         "lemma": "ἄγω",
         "pos": "verb",
         "meaning": "I lead",
+        "translations": ["lead"],
         "conjugation": "thematic",
         "forms": {
             "pres_act_ind_1sg": "ἄγω",
@@ -683,6 +705,7 @@ WORDS: dict[str, dict] = {
         "lemma": "λέγω",
         "pos": "verb",
         "meaning": "I say, speak",
+        "translations": ["say", "speak"],
         "conjugation": "thematic",
         "forms": {
             "pres_act_ind_1sg": "λέγω",
@@ -741,6 +764,7 @@ WORDS: dict[str, dict] = {
         "lemma": "ἔχω",
         "pos": "verb",
         "meaning": "I have, hold",
+        "translations": ["have", "hold"],
         "conjugation": "thematic",
         "forms": {
             "pres_act_ind_1sg": "ἔχω",
@@ -799,6 +823,7 @@ WORDS: dict[str, dict] = {
         "lemma": "βλέπω",
         "pos": "verb",
         "meaning": "I see, look",
+        "translations": ["see", "look"],
         "conjugation": "thematic",
         "forms": {
             "pres_act_ind_1sg": "βλέπω",
@@ -857,6 +882,7 @@ WORDS: dict[str, dict] = {
         "lemma": "διδάσκω",
         "pos": "verb",
         "meaning": "I teach",
+        "translations": ["teach"],
         "conjugation": "thematic",
         "forms": {
             "pres_act_ind_1sg": "διδάσκω",
@@ -917,6 +943,7 @@ WORDS: dict[str, dict] = {
         "lemma": "ἔρχομαι",
         "pos": "verb",
         "meaning": "I go, come",
+        "translations": ["go", "come"],
         "conjugation": "thematic",
         "deponent": True,
         "forms": {
@@ -950,6 +977,7 @@ WORDS: dict[str, dict] = {
         "lemma": "γίγνομαι",
         "pos": "verb",
         "meaning": "I become",
+        "translations": ["become"],
         "conjugation": "thematic",
         "deponent": True,
         "forms": {
@@ -983,6 +1011,7 @@ WORDS: dict[str, dict] = {
         "lemma": "βούλομαι",
         "pos": "verb",
         "meaning": "I wish, want",
+        "translations": ["wish", "want"],
         "conjugation": "thematic",
         "deponent": True,
         "forms": {
@@ -1016,6 +1045,7 @@ WORDS: dict[str, dict] = {
         "lemma": "δέχομαι",
         "pos": "verb",
         "meaning": "I receive",
+        "translations": ["receive"],
         "conjugation": "thematic",
         "deponent": True,
         "forms": {
@@ -1051,6 +1081,7 @@ WORDS: dict[str, dict] = {
         "lemma": "ἀγαθός",
         "pos": "adjective",
         "meaning": "good, noble",
+        "translations": ["good", "noble"],
         "forms": {
             # masculine
             "nom_sg_masc": "ἀγαθός", "gen_sg_masc": "ἀγαθοῦ",
@@ -1073,6 +1104,7 @@ WORDS: dict[str, dict] = {
         "lemma": "κακός",
         "pos": "adjective",
         "meaning": "bad, evil",
+        "translations": ["bad", "evil"],
         "forms": {
             "nom_sg_masc": "κακός", "gen_sg_masc": "κακοῦ",
             "dat_sg_masc": "κακῷ",  "acc_sg_masc": "κακόν",
@@ -1092,6 +1124,7 @@ WORDS: dict[str, dict] = {
         "lemma": "καλός",
         "pos": "adjective",
         "meaning": "beautiful, fine",
+        "translations": ["beautiful", "fine"],
         "forms": {
             "nom_sg_masc": "καλός", "gen_sg_masc": "καλοῦ",
             "dat_sg_masc": "καλῷ",  "acc_sg_masc": "καλόν",
@@ -1111,6 +1144,7 @@ WORDS: dict[str, dict] = {
         "lemma": "σοφός",
         "pos": "adjective",
         "meaning": "wise",
+        "translations": ["wise"],
         "forms": {
             "nom_sg_masc": "σοφός", "gen_sg_masc": "σοφοῦ",
             "dat_sg_masc": "σοφῷ",  "acc_sg_masc": "σοφόν",
@@ -1130,6 +1164,7 @@ WORDS: dict[str, dict] = {
         "lemma": "μικρός",
         "pos": "adjective",
         "meaning": "small, little",
+        "translations": ["small", "little"],
         "forms": {
             "nom_sg_masc": "μικρός", "gen_sg_masc": "μικροῦ",
             "dat_sg_masc": "μικρῷ",  "acc_sg_masc": "μικρόν",
@@ -1149,6 +1184,7 @@ WORDS: dict[str, dict] = {
         "lemma": "μέγας",
         "pos": "adjective",
         "meaning": "great, large",
+        "translations": ["great", "large"],
         "forms": {
             "nom_sg_masc": "μέγας",  "gen_sg_masc": "μεγάλου",
             "dat_sg_masc": "μεγάλῳ", "acc_sg_masc": "μέγαν",
@@ -1168,6 +1204,7 @@ WORDS: dict[str, dict] = {
         "lemma": "δίκαιος",
         "pos": "adjective",
         "meaning": "just, righteous",
+        "translations": ["just", "righteous"],
         "forms": {
             "nom_sg_masc": "δίκαιος", "gen_sg_masc": "δικαίου",
             "dat_sg_masc": "δικαίῳ",  "acc_sg_masc": "δίκαιον",
@@ -1187,6 +1224,7 @@ WORDS: dict[str, dict] = {
         "lemma": "ἄξιος",
         "pos": "adjective",
         "meaning": "worthy, deserving",
+        "translations": ["worthy", "deserving"],
         "forms": {
             "nom_sg_masc": "ἄξιος", "gen_sg_masc": "ἀξίου",
             "dat_sg_masc": "ἀξίῳ",  "acc_sg_masc": "ἄξιον",
@@ -1208,6 +1246,7 @@ WORDS: dict[str, dict] = {
         "lemma": "ἐν",
         "pos": "preposition",
         "meaning": "in (+ dative)",
+        "translations": ["in"],
         "governs": "dat",
         "forms": {"base": "ἐν"},
     },
@@ -1215,6 +1254,7 @@ WORDS: dict[str, dict] = {
         "lemma": "εἰς",
         "pos": "preposition",
         "meaning": "into, to (+ accusative)",
+        "translations": ["into"],
         "governs": "acc",
         "forms": {"base": "εἰς"},
     },
@@ -1222,6 +1262,7 @@ WORDS: dict[str, dict] = {
         "lemma": "ἐκ",
         "pos": "preposition",
         "meaning": "out of, from (+ genitive)",
+        "translations": ["out of"],
         "governs": "gen",
         "forms": {"base": "ἐκ"},
     },
@@ -1229,6 +1270,7 @@ WORDS: dict[str, dict] = {
         "lemma": "πρός",
         "pos": "preposition",
         "meaning": "to, toward (+ accusative)",
+        "translations": ["toward"],
         "governs": "acc",
         "forms": {"base": "πρός"},
     },
@@ -1236,6 +1278,7 @@ WORDS: dict[str, dict] = {
         "lemma": "ἀπό",
         "pos": "preposition",
         "meaning": "from, away from (+ genitive)",
+        "translations": ["away from"],
         "governs": "gen",
         "forms": {"base": "ἀπό"},
     },
@@ -1245,15 +1288,35 @@ WORDS: dict[str, dict] = {
         "lemma": "καί",
         "pos": "conjunction",
         "meaning": "and",
+        "translations": ["and"],
         "forms": {"base": "καί"},
     },
     "ἀλλά": {
         "lemma": "ἀλλά",
         "pos": "conjunction",
         "meaning": "but",
+        "translations": ["but"],
         "forms": {"base": "ἀλλά"},
     },
 }
+
+
+# ---------------------------------------------------------------------------
+# English → Greek reverse mapping
+# ---------------------------------------------------------------------------
+
+def _build_english_to_greek() -> dict[str, list[str]]:
+    mapping: dict[str, list[str]] = {}
+    for lemma, entry in WORDS.items():
+        for eng in entry.get("translations", []):
+            mapping.setdefault(eng, []).append(lemma)
+    return mapping
+
+ENGLISH_TO_GREEK = _build_english_to_greek()
+
+def translate_english(eng_keyword: str) -> list[str]:
+    """Return Greek lemmas for an English keyword."""
+    return ENGLISH_TO_GREEK.get(eng_keyword, [])
 
 
 # ---------------------------------------------------------------------------
@@ -1377,430 +1440,396 @@ PROMPTS: list[dict] = [
     {
         "english": "The man releases the horse.",
         "hint": "Subject (nom) + verb (3sg pres act) + object (acc)",
-        "required_lemmas": ["ὁ", "ἄνθρωπος", "λύω", "ἵππος"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος"},
-            "verb": "λύω",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "release",
             "tense": "pres",
             "voice": "act",
-            "object": {"noun": "ἵππος"},
+            "object": {"noun": "horse"},
         },
     },
     {
         "english": "The soldier writes a book.",
         "hint": "Subject (nom) + verb (3sg pres act) + object (acc, no article)",
-        "required_lemmas": ["ὁ", "στρατιώτης", "γράφω", "βιβλίον"],
-        "expected": {
-            "subject": {"noun": "στρατιώτης"},
-            "verb": "γράφω",
+        "roles": {
+            "subject": {"noun": "soldier"},
+            "verb": "write",
             "tense": "pres",
             "voice": "act",
-            "object": {"noun": "βιβλίον", "indef": True},
+            "object": {"noun": "book", "indef": True},
         },
     },
     {
         "english": "The good man teaches the child.",
         "hint": "Article + adjective + noun (nom) + verb (3sg pres act) + article + noun (acc)",
-        "required_lemmas": ["ὁ", "ἀγαθός", "ἄνθρωπος", "παιδεύω", "παιδίον"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος", "adj": "ἀγαθός"},
-            "verb": "παιδεύω",
+        "roles": {
+            "subject": {"noun": "man", "adj": "good"},
+            "verb": "teach",
             "tense": "pres",
             "voice": "act",
-            "object": {"noun": "παιδίον"},
+            "object": {"noun": "child"},
         },
     },
     {
         "english": "The god sends a gift.",
         "hint": "Subject (nom) + verb (3sg pres act) + object (acc, no article)",
-        "required_lemmas": ["ὁ", "θεός", "πέμπω", "δῶρον"],
-        "expected": {
-            "subject": {"noun": "θεός"},
-            "verb": "πέμπω",
+        "roles": {
+            "subject": {"noun": "god"},
+            "verb": "send",
             "tense": "pres",
             "voice": "act",
-            "object": {"noun": "δῶρον", "indef": True},
+            "object": {"noun": "gift", "indef": True},
         },
     },
     {
         "english": "The wise man has the truth.",
         "hint": "Article + adjective + noun (nom) + verb (3sg pres act) + article + noun (acc)",
-        "required_lemmas": ["ὁ", "σοφός", "ἄνθρωπος", "ἔχω", "ἀλήθεια"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος", "adj": "σοφός"},
-            "verb": "ἔχω",
+        "roles": {
+            "subject": {"noun": "man", "adj": "wise"},
+            "verb": "have",
             "tense": "pres",
             "voice": "act",
-            "object": {"noun": "ἀλήθεια"},
+            "object": {"noun": "truth"},
         },
     },
     {
         "english": "The man sees the sea.",
         "hint": "Subject (nom) + verb (3sg pres act) + object (acc)",
-        "required_lemmas": ["ὁ", "ἄνθρωπος", "βλέπω", "θάλαττα"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος"},
-            "verb": "βλέπω",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "see",
             "tense": "pres",
             "voice": "act",
-            "object": {"noun": "θάλαττα"},
+            "object": {"noun": "sea"},
         },
     },
     {
         "english": "The soldier leads the horse into the house.",
         "hint": "Subject + verb (3sg pres act) + object + preposition (εἰς + acc) + noun",
-        "required_lemmas": ["ὁ", "στρατιώτης", "ἄγω", "ἵππος", "εἰς", "οἰκία"],
-        "expected": {
-            "subject": {"noun": "στρατιώτης"},
-            "verb": "ἄγω",
+        "roles": {
+            "subject": {"noun": "soldier"},
+            "verb": "lead",
             "tense": "pres",
             "voice": "act",
-            "object": {"noun": "ἵππος"},
-            "pp": {"prep": "εἰς", "noun": "οἰκία"},
+            "object": {"noun": "horse"},
+            "pp": {"prep": "into", "noun": "house"},
         },
     },
     {
         "english": "The man carries the book out of the house.",
         "hint": "Subject + verb (3sg pres act) + object + preposition (ἐκ + gen) + noun",
-        "required_lemmas": ["ὁ", "ἄνθρωπος", "φέρω", "βιβλίον", "ἐκ", "οἰκία"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος"},
-            "verb": "φέρω",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "carry",
             "tense": "pres",
             "voice": "act",
-            "object": {"noun": "βιβλίον"},
-            "pp": {"prep": "ἐκ", "noun": "οἰκία"},
+            "object": {"noun": "book"},
+            "pp": {"prep": "out of", "noun": "house"},
         },
     },
     {
         "english": "The man says the word.",
         "hint": "Subject (nom) + verb (3sg pres act) + object (acc)",
-        "required_lemmas": ["ὁ", "ἄνθρωπος", "λέγω", "λόγος"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος"},
-            "verb": "λέγω",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "say",
             "tense": "pres",
             "voice": "act",
-            "object": {"noun": "λόγος"},
+            "object": {"noun": "word"},
         },
     },
     {
         "english": "The just man sees the beautiful gift.",
         "hint": "Article + adjective + noun (nom) + verb (3sg pres act) + article + adjective + noun (acc)",
-        "required_lemmas": ["ὁ", "δίκαιος", "ἄνθρωπος", "βλέπω", "καλός", "δῶρον"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος", "adj": "δίκαιος"},
-            "verb": "βλέπω",
+        "roles": {
+            "subject": {"noun": "man", "adj": "just"},
+            "verb": "see",
             "tense": "pres",
             "voice": "act",
-            "object": {"noun": "δῶρον", "adj": "καλός"},
+            "object": {"noun": "gift", "adj": "beautiful"},
         },
     },
     # ── Imperfect tense prompts ──────────────────────────────────────────
     {
         "english": "The man was releasing the horse.",
         "hint": "Subject (nom) + verb (3sg impf act) + object (acc)",
-        "required_lemmas": ["ὁ", "ἄνθρωπος", "λύω", "ἵππος"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος"},
-            "verb": "λύω",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "release",
             "tense": "impf",
             "voice": "act",
-            "object": {"noun": "ἵππος"},
+            "object": {"noun": "horse"},
         },
     },
     {
         "english": "The soldier was writing a book.",
         "hint": "Subject (nom) + verb (3sg impf act) + object (acc, no article)",
-        "required_lemmas": ["ὁ", "στρατιώτης", "γράφω", "βιβλίον"],
-        "expected": {
-            "subject": {"noun": "στρατιώτης"},
-            "verb": "γράφω",
+        "roles": {
+            "subject": {"noun": "soldier"},
+            "verb": "write",
             "tense": "impf",
             "voice": "act",
-            "object": {"noun": "βιβλίον", "indef": True},
+            "object": {"noun": "book", "indef": True},
         },
     },
     {
         "english": "The man was carrying the gift.",
         "hint": "Subject (nom) + verb (3sg impf act) + object (acc)",
-        "required_lemmas": ["ὁ", "ἄνθρωπος", "φέρω", "δῶρον"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος"},
-            "verb": "φέρω",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "carry",
             "tense": "impf",
             "voice": "act",
-            "object": {"noun": "δῶρον"},
+            "object": {"noun": "gift"},
         },
     },
     # ── Future tense prompts ─────────────────────────────────────────────
     {
         "english": "The man will release the horse.",
         "hint": "Subject (nom) + verb (3sg fut act) + object (acc)",
-        "required_lemmas": ["ὁ", "ἄνθρωπος", "λύω", "ἵππος"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος"},
-            "verb": "λύω",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "release",
             "tense": "fut",
             "voice": "act",
-            "object": {"noun": "ἵππος"},
+            "object": {"noun": "horse"},
         },
     },
     {
         "english": "The god will send a gift.",
         "hint": "Subject (nom) + verb (3sg fut act) + object (acc, no article)",
-        "required_lemmas": ["ὁ", "θεός", "πέμπω", "δῶρον"],
-        "expected": {
-            "subject": {"noun": "θεός"},
-            "verb": "πέμπω",
+        "roles": {
+            "subject": {"noun": "god"},
+            "verb": "send",
             "tense": "fut",
             "voice": "act",
-            "object": {"noun": "δῶρον", "indef": True},
+            "object": {"noun": "gift", "indef": True},
         },
     },
     {
         "english": "The soldier will lead the horse into the house.",
         "hint": "Subject + verb (3sg fut act) + object + preposition (εἰς + acc) + noun",
-        "required_lemmas": ["ὁ", "στρατιώτης", "ἄγω", "ἵππος", "εἰς", "οἰκία"],
-        "expected": {
-            "subject": {"noun": "στρατιώτης"},
-            "verb": "ἄγω",
+        "roles": {
+            "subject": {"noun": "soldier"},
+            "verb": "lead",
             "tense": "fut",
             "voice": "act",
-            "object": {"noun": "ἵππος"},
-            "pp": {"prep": "εἰς", "noun": "οἰκία"},
+            "object": {"noun": "horse"},
+            "pp": {"prep": "into", "noun": "house"},
         },
     },
     # ── Aorist tense prompts ─────────────────────────────────────────────
     {
         "english": "The man released the horse.",
         "hint": "Subject (nom) + verb (3sg aor act) + object (acc)",
-        "required_lemmas": ["ὁ", "ἄνθρωπος", "λύω", "ἵππος"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος"},
-            "verb": "λύω",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "release",
             "tense": "aor",
             "voice": "act",
-            "object": {"noun": "ἵππος"},
+            "object": {"noun": "horse"},
         },
     },
     {
         "english": "The soldier wrote a book.",
         "hint": "Subject (nom) + verb (3sg aor act) + object (acc, no article)",
-        "required_lemmas": ["ὁ", "στρατιώτης", "γράφω", "βιβλίον"],
-        "expected": {
-            "subject": {"noun": "στρατιώτης"},
-            "verb": "γράφω",
+        "roles": {
+            "subject": {"noun": "soldier"},
+            "verb": "write",
             "tense": "aor",
             "voice": "act",
-            "object": {"noun": "βιβλίον", "indef": True},
+            "object": {"noun": "book", "indef": True},
         },
     },
     {
         "english": "The man said the word.",
         "hint": "Subject (nom) + verb (3sg aor act) + object (acc)",
-        "required_lemmas": ["ὁ", "ἄνθρωπος", "λέγω", "λόγος"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος"},
-            "verb": "λέγω",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "say",
             "tense": "aor",
             "voice": "act",
-            "object": {"noun": "λόγος"},
+            "object": {"noun": "word"},
         },
     },
     {
         "english": "The man carried the book out of the house.",
         "hint": "Subject + verb (3sg aor act) + object + preposition (ἐκ + gen) + noun",
-        "required_lemmas": ["ὁ", "ἄνθρωπος", "φέρω", "βιβλίον", "ἐκ", "οἰκία"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος"},
-            "verb": "φέρω",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "carry",
             "tense": "aor",
             "voice": "act",
-            "object": {"noun": "βιβλίον"},
-            "pp": {"prep": "ἐκ", "noun": "οἰκία"},
+            "object": {"noun": "book"},
+            "pp": {"prep": "out of", "noun": "house"},
         },
     },
     # ── Middle voice prompts ───────────────────────────────────────────
     {
         "english": "The man ransoms the horse.",
         "hint": "Subject (nom) + verb (3sg pres mid) + object (acc)",
-        "required_lemmas": ["ὁ", "ἄνθρωπος", "λύω", "ἵππος"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος"},
-            "verb": "λύω",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "ransom",
             "tense": "pres",
             "voice": "mid",
-            "object": {"noun": "ἵππος"},
+            "object": {"noun": "horse"},
         },
     },
     {
         "english": "The soldier was having the child educated.",
         "hint": "Subject (nom) + verb (3sg impf mid) + object (acc)",
-        "required_lemmas": ["ὁ", "στρατιώτης", "παιδεύω", "παιδίον"],
-        "expected": {
-            "subject": {"noun": "στρατιώτης"},
-            "verb": "παιδεύω",
+        "roles": {
+            "subject": {"noun": "soldier"},
+            "verb": "educate",
             "tense": "impf",
             "voice": "mid",
-            "object": {"noun": "παιδίον"},
+            "object": {"noun": "child"},
         },
     },
     {
         "english": "The man will carry the gift for himself.",
         "hint": "Subject (nom) + verb (3sg fut mid) + object (acc)",
-        "required_lemmas": ["ὁ", "ἄνθρωπος", "φέρω", "δῶρον"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος"},
-            "verb": "φέρω",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "carry",
             "tense": "fut",
             "voice": "mid",
-            "object": {"noun": "δῶρον"},
+            "object": {"noun": "gift"},
         },
     },
     {
         "english": "The soldier led the horse for himself.",
         "hint": "Subject (nom) + verb (3sg aor mid) + object (acc)",
-        "required_lemmas": ["ὁ", "στρατιώτης", "ἄγω", "ἵππος"],
-        "expected": {
-            "subject": {"noun": "στρατιώτης"},
-            "verb": "ἄγω",
+        "roles": {
+            "subject": {"noun": "soldier"},
+            "verb": "lead",
             "tense": "aor",
             "voice": "mid",
-            "object": {"noun": "ἵππος"},
+            "object": {"noun": "horse"},
         },
     },
     # ── Deponent verb prompts ──────────────────────────────────────────
     {
         "english": "The man receives the gift.",
         "hint": "Subject (nom) + verb (3sg pres act — deponent, use middle form) + object (acc)",
-        "required_lemmas": ["ὁ", "ἄνθρωπος", "δέχομαι", "δῶρον"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος"},
-            "verb": "δέχομαι",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "receive",
             "tense": "pres",
             "voice": "act",
-            "object": {"noun": "δῶρον"},
+            "object": {"noun": "gift"},
         },
     },
     {
         "english": "The soldier was receiving the book.",
         "hint": "Subject (nom) + verb (3sg impf act — deponent, use middle form) + object (acc)",
-        "required_lemmas": ["ὁ", "στρατιώτης", "δέχομαι", "βιβλίον"],
-        "expected": {
-            "subject": {"noun": "στρατιώτης"},
-            "verb": "δέχομαι",
+        "roles": {
+            "subject": {"noun": "soldier"},
+            "verb": "receive",
             "tense": "impf",
             "voice": "act",
-            "object": {"noun": "βιβλίον"},
+            "object": {"noun": "book"},
         },
     },
     {
         "english": "The man will come to the house.",
         "hint": "Subject (nom) + verb (3sg fut act — deponent, use middle form) + preposition (πρός + acc)",
-        "required_lemmas": ["ὁ", "ἄνθρωπος", "ἔρχομαι", "πρός", "οἰκία"],
-        "expected": {
-            "subject": {"noun": "ἄνθρωπος"},
-            "verb": "ἔρχομαι",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "come",
             "tense": "fut",
             "voice": "act",
-            "pp": {"prep": "πρός", "noun": "οἰκία"},
+            "pp": {"prep": "toward", "noun": "house"},
         },
     },
     {
         "english": "The soldier received the horse.",
         "hint": "Subject (nom) + verb (3sg aor act — deponent, use middle form) + object (acc)",
-        "required_lemmas": ["ὁ", "στρατιώτης", "δέχομαι", "ἵππος"],
-        "expected": {
-            "subject": {"noun": "στρατιώτης"},
-            "verb": "δέχομαι",
+        "roles": {
+            "subject": {"noun": "soldier"},
+            "verb": "receive",
             "tense": "aor",
             "voice": "act",
-            "object": {"noun": "ἵππος"},
+            "object": {"noun": "horse"},
         },
     },
     # ── 1st / 2nd person prompts (pro-drop) ──────────────────────────────
     {
         "english": "I release the horse.",
         "hint": "Verb (1sg pres act) + object (acc) — no subject noun needed",
-        "required_lemmas": ["ὁ", "λύω", "ἵππος"],
-        "expected": {
-            "verb": "λύω",
+        "roles": {
+            "verb": "release",
             "tense": "pres",
             "voice": "act",
             "person": "1",
             "number": "sg",
-            "object": {"noun": "ἵππος"},
+            "object": {"noun": "horse"},
         },
     },
     {
         "english": "You write a book.",
         "hint": "Verb (2sg pres act) + object (acc, no article) — no subject noun needed",
-        "required_lemmas": ["γράφω", "βιβλίον"],
-        "expected": {
-            "verb": "γράφω",
+        "roles": {
+            "verb": "write",
             "tense": "pres",
             "voice": "act",
             "person": "2",
             "number": "sg",
-            "object": {"noun": "βιβλίον", "indef": True},
+            "object": {"noun": "book", "indef": True},
         },
     },
     {
         "english": "We send the gift.",
         "hint": "Verb (1pl pres act) + object (acc) — no subject noun needed",
-        "required_lemmas": ["ὁ", "πέμπω", "δῶρον"],
-        "expected": {
-            "verb": "πέμπω",
+        "roles": {
+            "verb": "send",
             "tense": "pres",
             "voice": "act",
             "person": "1",
             "number": "pl",
-            "object": {"noun": "δῶρον"},
+            "object": {"noun": "gift"},
         },
     },
     {
         "english": "I receive the gift.",
         "hint": "Verb (1sg pres act — deponent, use middle form) + object (acc) — no subject noun needed",
-        "required_lemmas": ["ὁ", "δέχομαι", "δῶρον"],
-        "expected": {
-            "verb": "δέχομαι",
+        "roles": {
+            "verb": "receive",
             "tense": "pres",
             "voice": "act",
             "person": "1",
             "number": "sg",
-            "object": {"noun": "δῶρον"},
+            "object": {"noun": "gift"},
         },
     },
     # ── Participle prompts ──────────────────────────────────────────────
     {
         "english": "The releasing man sees the horse.",
         "hint": "Article + participle (nom masc sg) + noun (nom) + verb (3sg pres act) + article + noun (acc)",
-        "required_lemmas": ["ὁ", "λύω", "ἄνθρωπος", "βλέπω", "ἵππος"],
-        "expected": {
+        "roles": {
             "subject": {
-                "noun": "ἄνθρωπος",
-                "participle": {"lemma": "λύω", "tense": "pres", "voice": "act"},
+                "noun": "man",
+                "participle": {"verb": "release", "tense": "pres", "voice": "act"},
             },
-            "verb": "βλέπω",
+            "verb": "see",
             "tense": "pres",
             "voice": "act",
-            "object": {"noun": "ἵππος"},
+            "object": {"noun": "horse"},
         },
     },
     {
         "english": "The writing soldier sends a gift.",
         "hint": "Article + participle (nom masc sg) + noun (nom) + verb (3sg pres act) + noun (acc, no article)",
-        "required_lemmas": ["ὁ", "γράφω", "στρατιώτης", "πέμπω", "δῶρον"],
-        "expected": {
+        "roles": {
             "subject": {
-                "noun": "στρατιώτης",
-                "participle": {"lemma": "γράφω", "tense": "pres", "voice": "act"},
+                "noun": "soldier",
+                "participle": {"verb": "write", "tense": "pres", "voice": "act"},
             },
-            "verb": "πέμπω",
+            "verb": "send",
             "tense": "pres",
             "voice": "act",
-            "object": {"noun": "δῶρον", "indef": True},
+            "object": {"noun": "gift", "indef": True},
         },
     },
 ]
