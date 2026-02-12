@@ -1832,4 +1832,77 @@ PROMPTS: list[dict] = [
             "object": {"noun": "gift", "indef": True},
         },
     },
+    # ── Dative prompts ──────────────────────────────────────────────────
+    {
+        "english": "The man sends the gift to the god.",
+        "hint": "Subject (nom) + verb (3sg pres act) + object (acc) + indirect object (dat)",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "send",
+            "tense": "pres",
+            "voice": "act",
+            "object": {"noun": "gift"},
+            "dative": {"noun": "god"},
+        },
+    },
+    {
+        "english": "The soldier sends a horse to the man.",
+        "hint": "Subject (nom) + verb (3sg pres act) + object (acc, no article) + indirect object (dat)",
+        "roles": {
+            "subject": {"noun": "soldier"},
+            "verb": "send",
+            "tense": "pres",
+            "voice": "act",
+            "object": {"noun": "horse", "indef": True},
+            "dative": {"noun": "man"},
+        },
+    },
+    {
+        "english": "The god sends a gift to the good man.",
+        "hint": "Subject (nom) + verb (3sg pres act) + object (acc, no article) + article + adj + noun (dat)",
+        "roles": {
+            "subject": {"noun": "god"},
+            "verb": "send",
+            "tense": "pres",
+            "voice": "act",
+            "object": {"noun": "gift", "indef": True},
+            "dative": {"noun": "man", "adj": "good"},
+        },
+    },
+    {
+        "english": "The man writes a book for the child.",
+        "hint": "Subject (nom) + verb (3sg pres act) + object (acc, no article) + dative of reference (dat)",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "write",
+            "tense": "pres",
+            "voice": "act",
+            "object": {"noun": "book", "indef": True},
+            "dative": {"noun": "child"},
+        },
+    },
+    {
+        "english": "The man releases the horse with a word.",
+        "hint": "Subject (nom) + verb (3sg pres act) + object (acc) + dative of instrument (dat, no article)",
+        "roles": {
+            "subject": {"noun": "man"},
+            "verb": "release",
+            "tense": "pres",
+            "voice": "act",
+            "object": {"noun": "horse"},
+            "dative": {"noun": "word", "indef": True},
+        },
+    },
+    {
+        "english": "The soldier carries the gift to the god.",
+        "hint": "Subject (nom) + verb (3sg pres act) + object (acc) + indirect object (dat)",
+        "roles": {
+            "subject": {"noun": "soldier"},
+            "verb": "carry",
+            "tense": "pres",
+            "voice": "act",
+            "object": {"noun": "gift"},
+            "dative": {"noun": "god"},
+        },
+    },
 ]

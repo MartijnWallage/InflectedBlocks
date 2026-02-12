@@ -107,7 +107,7 @@ def _make_flat_s_constraint(roles: list[str]):
     """Return a constraint function for a flat S rule.
 
     *roles* maps each RHS position to its grammatical role:
-    "subj" (NP-nom), "verb" (V), "obj" (NP-acc), "pp" (PP).
+    "subj" (NP-nom), "verb" (V), "obj" (NP-acc), "iobj" (NP-dat), "pp" (PP).
     """
     v_idx = roles.index("verb")
     subj_idx = roles.index("subj") if "subj" in roles else None
@@ -117,6 +117,8 @@ def _make_flat_s_constraint(roles: list[str]):
             if role == "subj" and _get_feat(feats, idx, "case") != "nom":
                 return None
             if role == "obj" and _get_feat(feats, idx, "case") != "acc":
+                return None
+            if role == "iobj" and _get_feat(feats, idx, "case") != "dat":
                 return None
 
         if subj_idx is not None:
@@ -146,11 +148,16 @@ def _add_sentence_rules(rules: list):
         [("V", "verb"), ("NP", "obj")],
         [("V", "verb"), ("PP", "pp")],
         [("V", "verb"), ("NP", "obj"), ("PP", "pp")],
+        [("V", "verb"), ("NP", "iobj")],
+        [("V", "verb"), ("NP", "obj"), ("NP", "iobj")],
         # with overt subject
         [("NP", "subj"), ("V", "verb")],
         [("NP", "subj"), ("V", "verb"), ("NP", "obj")],
         [("NP", "subj"), ("V", "verb"), ("PP", "pp")],
         [("NP", "subj"), ("V", "verb"), ("NP", "obj"), ("PP", "pp")],
+        [("NP", "subj"), ("V", "verb"), ("NP", "iobj")],
+        [("NP", "subj"), ("V", "verb"), ("NP", "obj"), ("NP", "iobj")],
+        [("NP", "subj"), ("V", "verb"), ("NP", "obj"), ("NP", "iobj"), ("PP", "pp")],
     ]
     for pattern in patterns:
         seen: set[tuple] = set()

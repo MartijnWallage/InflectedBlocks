@@ -17,7 +17,7 @@ def _collect_english_words(roles: dict) -> list[str]:
     words: list[str] = []
     if "verb" in roles:
         words.append(roles["verb"])
-    for key in ("subject", "object"):
+    for key in ("subject", "object", "dative"):
         np = roles.get(key)
         if isinstance(np, dict):
             if "noun" in np:
@@ -38,7 +38,7 @@ def _collect_english_words(roles: dict) -> list[str]:
 
 def _needs_article(roles: dict) -> bool:
     """Check if any NP in roles is definite (requires the article ὁ)."""
-    for key in ("subject", "object"):
+    for key in ("subject", "object", "dative"):
         np = roles.get(key)
         if isinstance(np, dict) and not np.get("indef"):
             return True
@@ -176,6 +176,8 @@ def extract_roles(tree) -> dict:
                 roles["subject"] = _extract_np(child)
             elif np_case == "acc":
                 roles["object"] = _extract_np(child)
+            elif np_case == "dat":
+                roles["dative"] = _extract_np(child)
         elif child.symbol == "PP":
             roles["pp"] = _extract_pp(child)
 
@@ -281,6 +283,17 @@ def check_translation(actual: dict, expected: dict) -> tuple[bool, list[str]]:
             _check_np_role("object", exp_obj, act_obj, mismatches)
     elif act_obj:
         mismatches.append("Unexpected object — the prompt doesn't have one")
+
+    # Check dative
+    exp_dat = expected.get("dative")
+    act_dat = actual.get("dative")
+    if exp_dat:
+        if not act_dat:
+            mismatches.append("Expected a dative noun phrase, but none found")
+        else:
+            _check_np_role("dative", exp_dat, act_dat, mismatches)
+    elif act_dat:
+        mismatches.append("Unexpected dative — the prompt doesn't have one")
 
     # Check PP
     exp_pp = expected.get("pp")
