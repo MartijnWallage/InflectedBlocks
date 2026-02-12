@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import random
+import unicodedata
 
 from data import WORDS
 from vocabulary import (
@@ -115,9 +116,17 @@ def review_flashcards(data: dict) -> None:
     prompt_input("Press Enter to return...")
 
 
+def _greek_sort_key(word: str) -> str:
+    """Return base letters only (no diacritics) for alphabetical sorting."""
+    return "".join(
+        c for c in unicodedata.normalize("NFD", word)
+        if unicodedata.category(c) != "Mn"
+    )
+
+
 def view_vocabulary(data: dict) -> None:
     """Display the user's learned vocabulary, allow selecting a word to view."""
-    vocabulary = data.get("vocabulary", [])
+    vocabulary = sorted(data.get("vocabulary", []), key=_greek_sort_key)
 
     while True:
         clear()
