@@ -113,10 +113,13 @@ def _make_flat_s_constraint(roles: list[str]):
     subj_idx = roles.index("subj") if "subj" in roles else None
 
     def constraint(feats):
+        if _get_feat(feats, v_idx, "mood") == "inf":
+            return None
+        obj_case = _get_feat(feats, v_idx, "object_case") or "acc"
         for idx, role in enumerate(roles):
             if role == "subj" and _get_feat(feats, idx, "case") != "nom":
                 return None
-            if role == "obj" and _get_feat(feats, idx, "case") != "acc":
+            if role == "obj" and _get_feat(feats, idx, "case") != obj_case:
                 return None
             if role == "iobj" and _get_feat(feats, idx, "case") != "dat":
                 return None
@@ -158,6 +161,11 @@ def _add_sentence_rules(rules: list):
         [("NP", "subj"), ("V", "verb"), ("NP", "iobj")],
         [("NP", "subj"), ("V", "verb"), ("NP", "obj"), ("NP", "iobj")],
         [("NP", "subj"), ("V", "verb"), ("NP", "obj"), ("NP", "iobj"), ("PP", "pp")],
+        # with infinitive phrase
+        [("V", "verb"), ("InfP", "infp")],
+        [("V", "verb"), ("NP", "obj"), ("InfP", "infp")],
+        [("NP", "subj"), ("V", "verb"), ("InfP", "infp")],
+        [("NP", "subj"), ("V", "verb"), ("NP", "obj"), ("InfP", "infp")],
     ]
     for pattern in patterns:
         seen: set[tuple] = set()
@@ -251,6 +259,37 @@ def _make_rules():
             return None
         return {}
     rules.append(("PP", ["Prep", "NP"], pp_prep_np))
+
+    # -- InfP rules (infinitive phrase — free word order) ----------------
+
+    def _make_infp_constraint(roles):
+        v_idx = roles.index("verb")
+        def constraint(feats):
+            if _get_feat(feats, v_idx, "mood") != "inf":
+                return None
+            obj_case = _get_feat(feats, v_idx, "object_case") or "acc"
+            for idx, role in enumerate(roles):
+                if role == "obj" and _get_feat(feats, idx, "case") != obj_case:
+                    return None
+            return {}
+        return constraint
+
+    infp_patterns = [
+        [("V", "verb")],
+        [("V", "verb"), ("NP", "obj")],
+        [("V", "verb"), ("PP", "pp")],
+        [("V", "verb"), ("NP", "obj"), ("PP", "pp")],
+    ]
+    for pattern in infp_patterns:
+        seen: set[tuple] = set()
+        for perm in _permutations(range(len(pattern))):
+            rhs = [pattern[i][0] for i in perm]
+            perm_roles = [pattern[i][1] for i in perm]
+            key = (tuple(rhs), tuple(perm_roles))
+            if key in seen:
+                continue
+            seen.add(key)
+            rules.append(("InfP", rhs, _make_infp_constraint(perm_roles)))
 
     # -- Flat sentence rules (all word-order permutations) ---------------
 

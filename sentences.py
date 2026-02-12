@@ -33,6 +33,19 @@ def _collect_english_words(roles: dict) -> list[str]:
             words.append(pp["prep"])
         if "noun" in pp:
             words.append(pp["noun"])
+    inf = roles.get("infinitive")
+    if isinstance(inf, dict):
+        if "verb" in inf:
+            words.append(inf["verb"])
+        inf_obj = inf.get("object")
+        if isinstance(inf_obj, dict) and "noun" in inf_obj:
+            words.append(inf_obj["noun"])
+        inf_pp = inf.get("pp")
+        if isinstance(inf_pp, dict):
+            if "prep" in inf_pp:
+                words.append(inf_pp["prep"])
+            if "noun" in inf_pp:
+                words.append(inf_pp["noun"])
     return words
 
 
@@ -45,6 +58,14 @@ def _needs_article(roles: dict) -> bool:
     pp = roles.get("pp")
     if isinstance(pp, dict) and "noun" in pp:
         return True
+    inf = roles.get("infinitive")
+    if isinstance(inf, dict):
+        inf_obj = inf.get("object")
+        if isinstance(inf_obj, dict) and not inf_obj.get("indef"):
+            return True
+        inf_pp = inf.get("pp")
+        if isinstance(inf_pp, dict) and "noun" in inf_pp:
+            return True
     return False
 
 
@@ -147,6 +168,21 @@ def _extract_pp(node) -> dict:
     return result
 
 
+def _extract_infp(node) -> dict:
+    """Extract verb, object, and PP from an InfP node."""
+    result: dict = {}
+    for child in node.children:
+        if child.symbol == "V":
+            result["verb"] = child.features.get("lemma")
+            result["tense"] = child.features.get("tense")
+            result["voice"] = child.features.get("voice")
+        elif child.symbol == "NP":
+            result["object"] = _extract_np(child)
+        elif child.symbol == "PP":
+            result["pp"] = _extract_pp(child)
+    return result
+
+
 def extract_roles(tree) -> dict:
     """Walk the parse tree and extract grammatical roles.
 
@@ -163,6 +199,8 @@ def extract_roles(tree) -> dict:
 
     roles: dict = {}
 
+    # First pass: extract verb info (needed to determine object case)
+    verb_obj_case = "acc"
     for child in tree.children:
         if child.symbol == "V":
             roles["verb"] = child.features.get("lemma")
@@ -170,16 +208,22 @@ def extract_roles(tree) -> dict:
             roles["voice"] = child.features.get("voice")
             roles["person"] = child.features.get("person")
             roles["number"] = child.features.get("number")
-        elif child.symbol == "NP":
+            verb_obj_case = child.features.get("object_case", "acc")
+
+    # Second pass: assign NP roles using verb's object case
+    for child in tree.children:
+        if child.symbol == "NP":
             np_case = child.features.get("case")
             if np_case == "nom":
                 roles["subject"] = _extract_np(child)
-            elif np_case == "acc":
+            elif np_case == verb_obj_case:
                 roles["object"] = _extract_np(child)
             elif np_case == "dat":
                 roles["dative"] = _extract_np(child)
         elif child.symbol == "PP":
             roles["pp"] = _extract_pp(child)
+        elif child.symbol == "InfP":
+            roles["infinitive"] = _extract_infp(child)
 
     return roles
 
@@ -318,6 +362,48 @@ def check_translation(actual: dict, expected: dict) -> tuple[bool, list[str]]:
                 )
     elif act_pp:
         mismatches.append("Unexpected prepositional phrase — the prompt doesn't have one")
+
+    # Check infinitive clause
+    exp_inf = expected.get("infinitive")
+    act_inf = actual.get("infinitive")
+    if exp_inf:
+        if not act_inf:
+            mismatches.append("Expected an infinitive clause, but none found")
+        else:
+            exp_inf_verb = exp_inf.get("verb")
+            act_inf_verb = act_inf.get("verb")
+            if exp_inf_verb and act_inf_verb not in translate_english(exp_inf_verb):
+                mismatches.append(
+                    f'In infinitive: expected verb "{exp_inf_verb}", '
+                    f'got "{_meaning(act_inf_verb)}" ({act_inf_verb})' if act_inf_verb
+                    else f'In infinitive: expected verb "{exp_inf_verb}", but none found'
+                )
+            exp_inf_obj = exp_inf.get("object")
+            act_inf_obj = act_inf.get("object")
+            if exp_inf_obj:
+                if not act_inf_obj:
+                    mismatches.append("In infinitive: expected an object, but none found")
+                else:
+                    _check_np_role("infinitive object", exp_inf_obj, act_inf_obj, mismatches)
+            elif act_inf_obj:
+                mismatches.append("In infinitive: unexpected object")
+            exp_inf_pp = exp_inf.get("pp")
+            act_inf_pp = act_inf.get("pp")
+            if exp_inf_pp:
+                if not act_inf_pp:
+                    mismatches.append("In infinitive: expected a PP, but none found")
+                else:
+                    exp_inf_prep = exp_inf_pp.get("prep")
+                    act_inf_prep = act_inf_pp.get("prep")
+                    if exp_inf_prep and act_inf_prep not in translate_english(exp_inf_prep):
+                        mismatches.append(
+                            f'In infinitive: expected preposition "{exp_inf_prep}", '
+                            f'got "{_meaning(act_inf_prep)}" ({act_inf_prep})'
+                        )
+            elif act_inf_pp:
+                mismatches.append("In infinitive: unexpected prepositional phrase")
+    elif act_inf:
+        mismatches.append("Unexpected infinitive clause — the prompt doesn't have one")
 
     return len(mismatches) == 0, mismatches
 
